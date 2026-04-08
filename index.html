@@ -8,486 +8,451 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --green: #1a5c2a;
-    --gold: #c8a84b;
-    --gold-light: #f5e9c8;
-    --bg: #f4f1eb;
+    --green-dark: #1b4d2e;
+    --green-mid: #2d6a4a;
+    --green-accent: #3a7d56;
+    --green-bg: #eef6f0;
+    --green-soft: #d4eadb;
+    --gold: #c8973a;
+    --gold-light: #fdf3e0;
     --card: #ffffff;
     --text: #1a1a1a;
-    --muted: #666;
-    --border: #e0d9cc;
-    --red: #c0392b;
-    --under: #1a5c2a;
-    --over: #c0392b;
-    --even: #555;
-    --cut: #aaa;
+    --muted: #6b7a6e;
+    --border: #cde0d3;
+    --under: #1b6b36;
+    --over: #b83232;
+    --even: #444;
+    --cut: #aab4a0;
+    --row-hover: #f5fbf7;
   }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
+    background: var(--green-bg);
     color: var(--text);
     min-height: 100vh;
   }
 
+  /* HEADER */
   header {
-    background: var(--green);
-    color: white;
-    padding: 16px 20px 12px;
+    background: var(--green-dark);
+    padding: 0 20px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .header-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px 0 12px;
   }
 
   .header-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .header-title {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-
-  .header-sub {
-    font-size: 12px;
-    opacity: 0.75;
-    margin-top: 2px;
-  }
-
-  .refresh-btn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .refresh-btn:active { opacity: 0.7; }
-
-  .status-bar {
-    margin-top: 8px;
-    font-size: 11px;
-    opacity: 0.7;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: #4caf50; display: inline-block; }
-  .dot.loading { background: var(--gold); animation: pulse 1s infinite; }
-  .dot.error { background: #ef5350; }
-
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  main { padding: 16px; max-width: 600px; margin: 0 auto; }
-
-  .round-banner {
-    background: var(--green);
-    color: white;
-    text-align: center;
-    padding: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-
-  .team-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    transition: box-shadow 0.15s;
-  }
-
-  .team-card:active { box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
-
-  .team-header {
-    display: flex;
-    align-items: center;
-    padding: 14px 16px;
-    cursor: pointer;
-    user-select: none;
     gap: 12px;
   }
 
-  .rank-badge {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
+  .logo-area { display: flex; align-items: center; gap: 10px; }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 1px;
+  }
+
+  .refresh-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
+    gap: 5px;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .refresh-btn:hover { background: rgba(255,255,255,0.18); }
+  .refresh-btn:active { transform: scale(0.97); }
+
+  .status-bar {
+    margin-top: 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4caf50;
     flex-shrink: 0;
+  }
+  .dot.loading { background: var(--gold); animation: pulse 1s infinite; }
+  .dot.error { background: #ef5350; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+  /* MAIN */
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  /* ROUND PILL */
+  .round-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-dark);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .round-pill .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4caf50;
+    animation: pulse 1.2s infinite;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .legend span { display: flex; align-items: center; gap: 4px; }
+
+  /* COLUMN HEADERS */
+  .col-headers {
+    display: grid;
+    grid-template-columns: 36px 1fr 60px 28px;
+    gap: 8px;
+    padding: 0 14px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
     color: var(--muted);
   }
 
-  .rank-badge.gold { background: var(--gold); border-color: var(--gold); color: white; }
-  .rank-badge.silver { background: #aaa; border-color: #aaa; color: white; }
-  .rank-badge.bronze { background: #cd7f32; border-color: #cd7f32; color: white; }
+  /* TEAM CARD */
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
 
-  .team-info { flex: 1; min-width: 0; }
+  .team-card:hover { border-color: #a8c9b2; box-shadow: 0 2px 12px rgba(27,77,46,0.08); }
 
+  .team-header {
+    display: grid;
+    grid-template-columns: 36px 1fr 60px 28px;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.1s;
+  }
+
+  .team-header:hover { background: var(--row-hover); }
+
+  /* RANK */
+  .rank {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    background: var(--green-soft);
+    color: var(--green-dark);
+  }
+
+  .rank.r1 { background: var(--gold); color: white; }
+  .rank.r2 { background: #b0b8b0; color: white; }
+  .rank.r3 { background: #c07d3a; color: white; }
+
+  /* TEAM INFO */
   .team-name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
+    color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .team-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  .team-score {
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .score-total {
-    font-size: 22px;
-    font-weight: 700;
-  }
-
-  .score-total.under { color: var(--under); }
-  .score-total.over { color: var(--over); }
-  .score-total.even { color: var(--even); }
-
-  .score-label {
     font-size: 11px;
     color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* SCORE */
+  .team-score {
     text-align: right;
   }
 
+  .score-num {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .score-num.under { color: var(--under); }
+  .score-num.over { color: var(--over); }
+  .score-num.even { color: var(--even); }
+
+  /* CHEVRON */
   .chevron {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-    transition: transform 0.2s;
+    width: 18px; height: 18px;
     color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    justify-self: end;
   }
 
   .chevron.open { transform: rotate(180deg); }
 
+  /* DETAIL PANEL */
   .team-detail {
     display: none;
+    background: #fafcfa;
     border-top: 1px solid var(--border);
-    padding: 0 16px 12px;
+    padding: 4px 14px 12px;
   }
 
   .team-detail.open { display: block; }
 
-  .golfer-row {
-    display: flex;
+  .detail-golfer {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
     align-items: center;
+    gap: 8px;
     padding: 8px 0;
-    border-bottom: 1px solid #f0ece4;
-    gap: 10px;
+    border-bottom: 1px solid #edf3ef;
   }
 
-  .golfer-row:last-child { border-bottom: none; }
+  .detail-golfer:last-of-type { border-bottom: none; }
 
-  .golfer-name {
-    flex: 1;
-    font-size: 14px;
+  .g-name {
+    font-size: 13px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .golfer-name.counting { font-weight: 600; }
-  .golfer-name.dropped { color: var(--muted); }
+  .g-name.counting { font-weight: 600; }
+  .g-name.dropped { color: var(--muted); }
 
-  .golfer-score {
-    font-size: 14px;
-    font-weight: 600;
-    min-width: 40px;
+  .g-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .g-badge.counts { background: #e6f4eb; color: #1b6b36; }
+  .g-badge.drop { background: #f0f0f0; color: #999; }
+
+  .g-score {
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 36px;
     text-align: right;
   }
 
-  .golfer-score.under { color: var(--under); }
-  .golfer-score.over { color: var(--over); }
-  .golfer-score.even { color: var(--even); }
-  .golfer-score.cut { color: var(--cut); font-weight: 400; font-style: italic; }
+  .g-score.under { color: var(--under); }
+  .g-score.over { color: var(--over); }
+  .g-score.even { color: var(--even); }
+  .g-score.cut { color: var(--cut); font-weight: 400; font-style: italic; }
 
-  .golfer-status {
+  .g-status {
     font-size: 11px;
-    min-width: 60px;
-    text-align: right;
     color: var(--muted);
-  }
-
-  .counting-badge {
-    font-size: 10px;
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-radius: 4px;
-    padding: 1px 5px;
-    flex-shrink: 0;
-  }
-
-  .drop-badge {
-    font-size: 10px;
-    background: #f5f5f5;
-    color: #999;
-    border-radius: 4px;
-    padding: 1px 5px;
-    flex-shrink: 0;
+    min-width: 48px;
+    text-align: right;
   }
 
   .detail-note {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--muted);
-    margin-top: 8px;
-    padding-top: 4px;
+    margin-top: 10px;
     text-align: center;
+    letter-spacing: 0.2px;
   }
 
-  .skeleton {
-    background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.2s infinite;
-    border-radius: 6px;
-    height: 16px;
-    margin: 4px 0;
-  }
-
-  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
+  /* ERROR */
   .error-msg {
-    background: #fff3f3;
-    border: 1px solid #ffcdd2;
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-    color: var(--red);
-    font-size: 14px;
-    margin-bottom: 12px;
-  }
-
-  .legend {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    font-size: 11px;
-    color: var(--muted);
+    background: #fff5f5;
+    border: 1px solid #f5c6c6;
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #a83232;
+    font-size: 13px;
     margin-bottom: 14px;
-    padding: 8px 12px;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid var(--border);
+    text-align: center;
   }
 
-  .legend span { display: flex; align-items: center; gap: 4px; }
-
+  /* FOOTER */
   footer {
     text-align: center;
     font-size: 11px;
     color: var(--muted);
-    padding: 16px;
-    margin-top: 8px;
+    padding: 8px 16px 24px;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.7;
   }
+
+  .spin { display: inline-block; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-top">
-    <div>
-      <div class="header-title">⛳ Masters Pool 2026</div>
-      <div class="header-sub">Best 6 of 8 picks count · Augusta National</div>
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo-area">
+        <div class="logo-icon">⛳</div>
+        <div>
+          <div class="header-title">Masters Pool 2026</div>
+          <div class="header-sub">Augusta National · Best 6 of 8</div>
+        </div>
+      </div>
+      <button class="refresh-btn" onclick="loadScores()">
+        <span id="refresh-icon">↻</span> Refresh
+      </button>
     </div>
-    <button class="refresh-btn" onclick="loadScores()">
-      <span id="refresh-icon">↻</span> Refresh
-    </button>
-  </div>
-  <div class="status-bar">
-    <span class="dot" id="status-dot"></span>
-    <span id="status-text">Loading scores...</span>
+    <div class="status-bar">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text">Loading scores...</span>
+    </div>
   </div>
 </header>
 
 <main>
-  <div id="round-banner" class="round-banner" style="display:none"></div>
-  <div id="error-box" style="display:none" class="error-msg"></div>
+  <div id="round-banner" style="display:none"></div>
+  <div id="error-box" class="error-msg" style="display:none"></div>
 
   <div class="legend">
     <span><strong style="color:var(--under)">−</strong> Under par</span>
     <span><strong style="color:var(--over)">+</strong> Over par</span>
     <span><strong style="color:var(--even)">E</strong> Even</span>
-    <span><em style="color:var(--cut)">CUT</em> Not counting</span>
+    <span style="color:var(--cut)"><em>CUT</em> Doesn't count</span>
+    <span><span style="color:#1b6b36;font-weight:600">★</span> Counting</span>
+  </div>
+
+  <div class="col-headers">
+    <div></div>
+    <div>Team</div>
+    <div style="text-align:right">Score</div>
+    <div></div>
   </div>
 
   <div id="leaderboard"></div>
 </main>
 
 <footer>
-  Scores via ESPN · Auto-refreshes every 3 min during tournament<br>
-  Best 6 of 8 golfers count · CUT/WD scores not counted
+  Scores via ESPN · Auto-refreshes every 3 minutes<br>
+  CUT / WD golfers score as +99 and are dropped automatically
 </footer>
 
 <script>
 // ============================================================
 //  TEAM CONFIGURATION — EDIT THIS SECTION
-//  Add your 10 teams below. Each team has a name and 8 golfer picks.
-//  Golfer names must match ESPN's spelling (Last, First or Full Name).
-//  Use the exact name as shown on the leaderboard.
 // ============================================================
 const TEAMS = [
   {
     name: "Team Alpha",
-    picks: [
-      "Scheffler, Scottie",
-      "McIlroy, Rory",
-      "Rahm, Jon",
-      "DeChambeau, Bryson",
-      "Åberg, Ludvig",
-      "Schauffele, Xander",
-      "Morikawa, Collin",
-      "Thomas, Justin"
-    ]
+    picks: ["Scheffler, Scottie","McIlroy, Rory","Rahm, Jon","DeChambeau, Bryson","Åberg, Ludvig","Schauffele, Xander","Morikawa, Collin","Thomas, Justin"]
   },
   {
     name: "Team Bravo",
-    picks: [
-      "Scheffler, Scottie",
-      "Spieth, Jordan",
-      "Fleetwood, Tommy",
-      "Hovland, Viktor",
-      "Burns, Sam",
-      "Cantlay, Patrick",
-      "Kim, Tom",
-      "Homa, Max"
-    ]
+    picks: ["Scheffler, Scottie","Spieth, Jordan","Fleetwood, Tommy","Hovland, Viktor","Burns, Sam","Cantlay, Patrick","Kim, Tom","Homa, Max"]
   },
   {
     name: "Team Charlie",
-    picks: [
-      "McIlroy, Rory",
-      "Rahm, Jon",
-      "Schauffele, Xander",
-      "Fleetwood, Tommy",
-      "Finau, Tony",
-      "Rose, Justin",
-      "Garcia, Sergio",
-      "Im, Sungjae"
-    ]
+    picks: ["McIlroy, Rory","Rahm, Jon","Schauffele, Xander","Fleetwood, Tommy","Finau, Tony","Rose, Justin","Garcia, Sergio","Im, Sungjae"]
   },
   {
     name: "Team Delta",
-    picks: [
-      "Scheffler, Scottie",
-      "DeChambeau, Bryson",
-      "Åberg, Ludvig",
-      "Morikawa, Collin",
-      "Hatton, Tyrrell",
-      "Young, Cameron",
-      "Lowry, Shane",
-      "Meronk, Adrian"
-    ]
+    picks: ["Scheffler, Scottie","DeChambeau, Bryson","Åberg, Ludvig","Morikawa, Collin","Hatton, Tyrrell","Young, Cameron","Lowry, Shane","Meronk, Adrian"]
   },
   {
     name: "Team Echo",
-    picks: [
-      "McIlroy, Rory",
-      "Spieth, Jordan",
-      "Thomas, Justin",
-      "Cantlay, Patrick",
-      "Fowler, Rickie",
-      "MacIntyre, Robert",
-      "Straka, Sepp",
-      "Power, Seamus"
-    ]
+    picks: ["McIlroy, Rory","Spieth, Jordan","Thomas, Justin","Cantlay, Patrick","Fowler, Rickie","MacIntyre, Robert","Straka, Sepp","Power, Seamus"]
   },
   {
     name: "Team Foxtrot",
-    picks: [
-      "Rahm, Jon",
-      "Schauffele, Xander",
-      "DeChambeau, Bryson",
-      "Hovland, Viktor",
-      "Homa, Max",
-      "Kim, Tom",
-      "Detry, Thomas",
-      "Coetzee, George"
-    ]
+    picks: ["Rahm, Jon","Schauffele, Xander","DeChambeau, Bryson","Hovland, Viktor","Homa, Max","Kim, Tom","Detry, Thomas","Coetzee, George"]
   },
   {
     name: "Team Golf",
-    picks: [
-      "Scheffler, Scottie",
-      "Åberg, Ludvig",
-      "Fleetwood, Tommy",
-      "Burns, Sam",
-      "Im, Sungjae",
-      "Gotterup, Chris",
-      "Bridgeman, Jacob",
-      "Griffin, Ben"
-    ]
+    picks: ["Scheffler, Scottie","Åberg, Ludvig","Fleetwood, Tommy","Burns, Sam","Im, Sungjae","Gotterup, Chris","Bridgeman, Jacob","Griffin, Ben"]
   },
   {
     name: "Team Hotel",
-    picks: [
-      "McIlroy, Rory",
-      "Morikawa, Collin",
-      "Hatton, Tyrrell",
-      "Young, Cameron",
-      "Rose, Justin",
-      "Finau, Tony",
-      "Hardy, Nick",
-      "Reitan, Kristoffer"
-    ]
+    picks: ["McIlroy, Rory","Morikawa, Collin","Hatton, Tyrrell","Young, Cameron","Rose, Justin","Finau, Tony","Hardy, Nick","Reitan, Kristoffer"]
   },
   {
     name: "Team India",
-    picks: [
-      "Scheffler, Scottie",
-      "Rahm, Jon",
-      "Thomas, Justin",
-      "Spieth, Jordan",
-      "MacIntyre, Robert",
-      "Lowry, Shane",
-      "Straka, Sepp",
-      "Cink, Stewart"
-    ]
+    picks: ["Scheffler, Scottie","Rahm, Jon","Thomas, Justin","Spieth, Jordan","MacIntyre, Robert","Lowry, Shane","Straka, Sepp","Cink, Stewart"]
   },
   {
     name: "Team Juliet",
-    picks: [
-      "McIlroy, Rory",
-      "DeChambeau, Bryson",
-      "Schauffele, Xander",
-      "Hovland, Viktor",
-      "Cantlay, Patrick",
-      "Garcia, Sergio",
-      "Fowler, Rickie",
-      "Meronk, Adrian"
-    ]
+    picks: ["McIlroy, Rory","DeChambeau, Bryson","Schauffele, Xander","Hovland, Viktor","Cantlay, Patrick","Garcia, Sergio","Fowler, Rickie","Meronk, Adrian"]
   }
 ];
 
 // ============================================================
-//  APP LOGIC — no need to edit below this line
+//  APP LOGIC
 // ============================================================
-
 let liveScores = {};
-let currentRound = '';
 
 function scoreClass(val) {
   if (val === null) return 'cut';
@@ -496,213 +461,158 @@ function scoreClass(val) {
   return 'even';
 }
 
-function formatScore(val) {
+function fmt(val) {
   if (val === null) return 'CUT';
   if (val === 0) return 'E';
   return val > 0 ? '+' + val : '' + val;
 }
 
-function normalizeName(name) {
-  return name.toLowerCase().replace(/[^a-z]/g, '');
-}
+function norm(s) { return s.toLowerCase().replace(/[^a-z]/g, ''); }
 
-function matchPlayer(pickName, espnName) {
-  const p = normalizeName(pickName);
-  const e = normalizeName(espnName);
-  if (p === e) return true;
-  const parts = espnName.split(', ');
-  if (parts.length === 2) {
-    const reversed = normalizeName(parts[1] + parts[0]);
-    if (p === reversed) return true;
-    if (e.includes(p) || p.includes(e)) return true;
-  }
-  return e.includes(p) || p.includes(e);
-}
-
-function getPlayerScore(pickName) {
-  for (const [espnName, data] of Object.entries(liveScores)) {
-    if (matchPlayer(pickName, espnName)) return data;
+function getScore(pick) {
+  for (const [name, data] of Object.entries(liveScores)) {
+    const p = norm(pick), e = norm(name);
+    if (p === e) return data;
+    const parts = name.split(', ');
+    if (parts.length === 2 && norm(parts[1] + parts[0]) === p) return data;
+    if (e.includes(p) || p.includes(e)) return data;
   }
   return null;
 }
 
-function calcTeamScore(picks) {
-  const scores = picks.map(p => {
-    const d = getPlayerScore(p);
-    return d ? d.score : null;
+function calcTeam(picks) {
+  const scores = picks.map(p => { const d = getScore(p); return d ? d.score : null; });
+  const valid = scores.filter(s => s !== null).slice().sort((a, b) => a - b);
+  const total = valid.slice(0, 6).reduce((a, b) => a + b, 0);
+  return { scores, total };
+}
+
+function buildDetail(picks, scores) {
+  const validSorted = scores.filter(s => s !== null).slice().sort((a, b) => a - b);
+  const countingPool = [...validSorted.slice(0, 6)];
+  const isCounting = scores.map(s => {
+    if (s === null) return false;
+    const i = countingPool.indexOf(s);
+    if (i !== -1) { countingPool.splice(i, 1); return true; }
+    return false;
   });
 
-  const valid = scores.filter(s => s !== null).sort((a, b) => a - b);
-  const counting = valid.slice(0, 6);
-  const total = counting.reduce((a, b) => a + b, 0);
+  return picks.map((name, i) => {
+    const s = scores[i];
+    const data = getScore(name);
+    const counting = isCounting[i];
+    const sc = scoreClass(s);
+    const status = data?.status || '–';
+    const badge = s === null
+      ? `<span class="g-badge drop">cut/wd</span>`
+      : counting
+        ? `<span class="g-badge counts">★ counts</span>`
+        : `<span class="g-badge drop">dropped</span>`;
 
-  return { scores, total, counting };
+    return `<div class="detail-golfer">
+      <div class="g-name ${counting ? 'counting' : 'dropped'}">${name}</div>
+      ${badge}
+      <div class="g-score ${sc}">${fmt(s)}</div>
+      <div class="g-status">${status}</div>
+    </div>`;
+  }).join('');
 }
 
 function renderLeaderboard() {
-  const results = TEAMS.map((team, i) => {
-    const { scores, total } = calcTeamScore(team.picks);
-    return { team, scores, total, idx: i };
+  const sorted = TEAMS.map((team, i) => {
+    const { scores, total } = calcTeam(team.picks);
+    return { team, scores, total };
   }).sort((a, b) => a.total - b.total);
 
   const lb = document.getElementById('leaderboard');
   lb.innerHTML = '';
 
-  results.forEach((r, rank) => {
-    const { team, scores, total } = r;
-    const validScores = scores.filter(s => s !== null).sort((a, b) => a - b);
-    const countingSet = new Set();
-    let countLeft = 6;
-    validScores.forEach(s => { if (countLeft-- > 0) countingSet.add(s); });
+  sorted.forEach(({ team, scores, total }, rank) => {
+    const sc = scoreClass(total);
+    const rankClass = rank === 0 ? 'r1' : rank === 1 ? 'r2' : rank === 2 ? 'r3' : '';
+    const scoring = Math.min(scores.filter(s => s !== null).length, 6);
 
     const card = document.createElement('div');
     card.className = 'team-card';
-
-    const badgeClass = rank === 0 ? 'gold' : rank === 1 ? 'silver' : rank === 2 ? 'bronze' : '';
-    const sc = scoreClass(total);
-    const countingCount = Math.min(scores.filter(s => s !== null).length, 6);
-
     card.innerHTML = `
-      <div class="team-header" onclick="toggleDetail(this)">
-        <div class="rank-badge ${badgeClass}">${rank + 1}</div>
-        <div class="team-info">
+      <div class="team-header" onclick="toggle(this)">
+        <div class="rank ${rankClass}">${rank + 1}</div>
+        <div>
           <div class="team-name">${team.name}</div>
-          <div class="team-sub">${countingCount} of 8 scoring</div>
+          <div class="team-sub">${scoring} golfer${scoring !== 1 ? 's' : ''} scoring</div>
         </div>
         <div class="team-score">
-          <div class="score-total ${sc}">${formatScore(total)}</div>
-          <div class="score-label">team total</div>
+          <div class="score-num ${sc}">${fmt(total)}</div>
         </div>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
           <polyline points="6 9 12 15 18 9"/>
         </svg>
       </div>
       <div class="team-detail">
-        ${buildDetailRows(team.picks, scores)}
-        <div class="detail-note">★ = counting toward team score (best 6)</div>
-      </div>
-    `;
-
+        ${buildDetail(team.picks, scores)}
+        <div class="detail-note">Best 6 of 8 picks count · Lowest scores selected automatically</div>
+      </div>`;
     lb.appendChild(card);
   });
 }
 
-function buildDetailRows(picks, scores) {
-  const validScores = scores.filter(s => s !== null).slice().sort((a, b) => a - b);
-  const countingScores = validScores.slice(0, 6);
-
-  const used = [...countingScores];
-  const isCounting = scores.map(s => {
-    if (s === null) return false;
-    const idx = used.indexOf(s);
-    if (idx !== -1) { used.splice(idx, 1); return true; }
-    return false;
-  });
-
-  return picks.map((name, i) => {
-    const data = getPlayerScore(name);
-    const s = scores[i];
-    const counting = isCounting[i];
-    const sc = scoreClass(s);
-    const status = data ? data.status : '–';
-    const badge = s === null
-      ? `<span class="drop-badge">CUT/–</span>`
-      : counting
-        ? `<span class="counting-badge">★ counts</span>`
-        : `<span class="drop-badge">dropped</span>`;
-
-    return `
-      <div class="golfer-row">
-        <div class="golfer-name ${counting ? 'counting' : 'dropped'}">${name}</div>
-        ${badge}
-        <div class="golfer-score ${sc}">${formatScore(s)}</div>
-        <div class="golfer-status">${status}</div>
-      </div>`;
-  }).join('');
-}
-
-function toggleDetail(header) {
+function toggle(header) {
   const detail = header.nextElementSibling;
   const chevron = header.querySelector('.chevron');
-  const isOpen = detail.classList.contains('open');
+  const wasOpen = detail.classList.contains('open');
   document.querySelectorAll('.team-detail.open').forEach(d => {
     d.classList.remove('open');
     d.previousElementSibling.querySelector('.chevron').classList.remove('open');
   });
-  if (!isOpen) {
-    detail.classList.add('open');
-    chevron.classList.add('open');
-  }
+  if (!wasOpen) { detail.classList.add('open'); chevron.classList.add('open'); }
 }
 
 function setStatus(type, msg) {
-  const dot = document.getElementById('status-dot');
-  const text = document.getElementById('status-text');
-  dot.className = 'dot ' + type;
-  text.textContent = msg;
+  document.getElementById('status-dot').className = 'dot ' + type;
+  document.getElementById('status-text').textContent = msg;
 }
 
 async function loadScores() {
-  setStatus('loading', 'Fetching live scores...');
+  setStatus('loading', 'Fetching live scores…');
   document.getElementById('error-box').style.display = 'none';
-
   try {
-    const res = await fetch(
-      'https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401703510',
-      { cache: 'no-store' }
-    );
-    if (!res.ok) throw new Error('ESPN API returned ' + res.status);
+    const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401703510', { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
     const data = await res.json();
+    const comp = data?.events?.[0]?.competitions?.[0];
+    if (!comp) throw new Error('No data');
 
-    const competition = data?.events?.[0]?.competitions?.[0];
-    if (!competition) throw new Error('No competition data found');
-
-    const round = competition.status?.type?.description || '';
-    currentRound = round;
-
+    const round = comp.status?.type?.description || '';
     const banner = document.getElementById('round-banner');
-    if (round) { banner.textContent = round; banner.style.display = 'block'; }
+    if (round) {
+      banner.style.display = 'inline-flex';
+      banner.className = 'round-pill';
+      banner.innerHTML = `<span class="live-dot"></span>${round}`;
+    }
 
     liveScores = {};
-    const competitors = competition.competitors || [];
-    competitors.forEach(c => {
+    (comp.competitors || []).forEach(c => {
       const name = c.athlete?.displayName || '';
-      const rawScore = c.score?.displayValue;
+      const raw = c.score?.displayValue;
       let score = null;
-      if (rawScore && rawScore !== 'E' && rawScore !== '--') {
-        const n = parseInt(rawScore);
-        score = isNaN(n) ? null : n;
-      } else if (rawScore === 'E') {
-        score = 0;
-      }
-      const status = c.status?.type?.shortDetail || c.status?.displayValue || '';
-      liveScores[name] = { score, status };
+      if (raw === 'E') score = 0;
+      else if (raw && raw !== '--') { const n = parseInt(raw); if (!isNaN(n)) score = n; }
+      liveScores[name] = { score, status: c.status?.type?.shortDetail || '' };
     });
 
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     setStatus('', `Live · Updated ${now}`);
-
     renderLeaderboard();
-  } catch (err) {
-    console.error(err);
-    setStatus('error', 'Could not load scores');
+  } catch (e) {
+    setStatus('error', 'Could not load — tap Refresh to retry');
     const eb = document.getElementById('error-box');
     eb.style.display = 'block';
-    eb.textContent = '⚠ Could not fetch live scores. Scores shown may be outdated. Tap Refresh to try again.';
-
+    eb.textContent = '⚠ Tournament scores unavailable. This is normal before Round 1 on Thursday April 9.';
     if (Object.keys(liveScores).length === 0) {
-      renderFallback();
-    } else {
-      renderLeaderboard();
+      TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–' }; }));
     }
+    renderLeaderboard();
   }
-}
-
-function renderFallback() {
-  TEAMS.forEach(t => t.picks.forEach(p => {
-    if (!liveScores[p]) liveScores[p] = { score: null, status: '–' };
-  }));
-  renderLeaderboard();
 }
 
 loadScores();
