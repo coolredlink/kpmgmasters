@@ -408,44 +408,20 @@
 // ============================================================
 const TEAMS = [
   {
-    name: "Team Jo”,
-    picks: ["Scheffler, Scottie","DeChambeau, Bryson”,”Rose, Justin”,"Åberg, Ludvig”,”Thomas, Justin”,”Lowry, Shane”,”Conners, Corey”,”Taylor, Nick”]
+    name: "Felix",
+    picks: ["Scottie Scheffler","Bryson DeChambeau","Xander Schauffele","Ludvig Aberg","Min Woo Lee","Akshay Bhatia","Nicolai Hojgaard","Corey Conners"]
   },
   {
-    name: "Team Swats”,
-    picks: ["Scheffler, Scottie","McIlroy, Rory","Åberg, Ludvig”,”Straka, Sepp”,”Lee, Woo Min”,”Burns, Sam”,”Conners, Corey","Rose, Justin"]
+    name: "Alain",
+    picks: ["Scottie Scheffler","Rory McIlroy","Xander Schauffele","Ludvig Aberg","Justin Thomas","Patrick Cantlay","Harris English","Nicolai Hojgaard"]
   },
   {
-    name: "Team MAF”,
-    picks: ["McIlroy, Rory","Rahm, Jon","Schauffele, Xander","Fleetwood, Tommy","Finau, Tony","Rose, Justin","Garcia, Sergio","Im, Sungjae"]
+    name: "Swats",
+    picks: ["Scottie Scheffler","Rory McIlroy","Justin Rose","Ludvig Aberg","Sepp Straka","Min Woo Lee","Corey Conners","Sam Burns"]
   },
   {
-    name: "Team Alain",
-    picks: ["Scheffler, Scottie","McIlroy, Rory","Åberg, Ludvig","Schauffele, Xander”,”Thomas, Justin”,”Cantlay, Patrick”,,”English, Harris”,”Hojgaard, Nicolai”]
-  },
-  {
-    name: "Team Larry",
-    picks: ["McIlroy, Rory","Spieth, Jordan","Thomas, Justin","Cantlay, Patrick","Fowler, Rickie","MacIntyre, Robert","Straka, Sepp","Power, Seamus"]
-  },
-  {
-    name: "Team Bine",
-    picks: ["Rahm, Jon","Schauffele, Xander","DeChambeau, Bryson","Hovland, Viktor","Homa, Max","Kim, Tom","Detry, Thomas","Coetzee, George"]
-  },
-  {
-    name: "Team Jesse”,
-    picks: ["Scheffler, Scottie","Åberg, Ludvig","Fleetwood, Tommy","Burns, Sam","Im, Sungjae","Gotterup, Chris","Bridgeman, Jacob","Griffin, Ben"]
-  },
-  {
-    name: "Team Dave",
-    picks: ["McIlroy, Rory","Morikawa, Collin","Hatton, Tyrrell","Young, Cameron","Rose, Justin","Finau, Tony","Hardy, Nick","Reitan, Kristoffer"]
-  },
-  {
-    name: "Team Will”,
-    picks: ["Scheffler, Scottie","Rahm, Jon","Thomas, Justin","Spieth, Jordan","MacIntyre, Robert","Lowry, Shane","Straka, Sepp","Cink, Stewart"]
-  },
-  {
-    name: "Team Felix”,
-    picks: ["McIlroy, Rory","DeChambeau, Bryson","Schauffele, Xander","Hovland, Viktor","Cantlay, Patrick","Garcia, Sergio","Fowler, Rickie","Meronk, Adrian"]
+    name: "Jo",
+    picks: ["Scottie Scheffler","Bryson DeChambeau","Justin Rose","Ludvig Aberg","Justin Thomas","Shane Lowry","Nick Taylor","Corey Conners"]
   }
 ];
 
@@ -470,12 +446,16 @@ function fmt(val) {
 function norm(s) { return s.toLowerCase().replace(/[^a-z]/g, ''); }
 
 function getScore(pick) {
+  const p = norm(pick);
   for (const [name, data] of Object.entries(liveScores)) {
-    const p = norm(pick), e = norm(name);
+    const e = norm(name);
     if (p === e) return data;
     const parts = name.split(', ');
-    if (parts.length === 2 && norm(parts[1] + parts[0]) === p) return data;
-    if (e.includes(p) || p.includes(e)) return data;
+    if (parts.length === 2) {
+      if (norm(parts[1] + parts[0]) === p) return data;
+      if (norm(parts[0] + parts[1]) === p) return data;
+    }
+    if (e.length > 5 && p.length > 5 && (e.includes(p) || p.includes(e))) return data;
   }
   return null;
 }
