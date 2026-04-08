@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masters Pool 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1a5c2a;
+    --gold: #c8a84b;
+    --gold-light: #f5e9c8;
+    --bg: #f4f1eb;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #e0d9cc;
+    --red: #c0392b;
+    --under: #1a5c2a;
+    --over: #c0392b;
+    --even: #555;
+    --cut: #aaa;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--green);
+    color: white;
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .header-sub {
+    font-size: 12px;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+
+  .refresh-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .refresh-btn:active { opacity: 0.7; }
+
+  .status-bar {
+    margin-top: 8px;
+    font-size: 11px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #4caf50; display: inline-block; }
+  .dot.loading { background: var(--gold); animation: pulse 1s infinite; }
+  .dot.error { background: #ef5350; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  main { padding: 16px; max-width: 600px; margin: 0 auto; }
+
+  .round-banner {
+    background: var(--green);
+    color: white;
+    text-align: center;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+
+  .team-card:active { box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+
+  .team-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+
+  .rank-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+
+  .rank-badge.gold { background: var(--gold); border-color: var(--gold); color: white; }
+  .rank-badge.silver { background: #aaa; border-color: #aaa; color: white; }
+  .rank-badge.bronze { background: #cd7f32; border-color: #cd7f32; color: white; }
+
+  .team-info { flex: 1; min-width: 0; }
+
+  .team-name {
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .team-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .team-score {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .score-total {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .score-total.under { color: var(--under); }
+  .score-total.over { color: var(--over); }
+  .score-total.even { color: var(--even); }
+
+  .score-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+    color: var(--muted);
+  }
+
+  .chevron.open { transform: rotate(180deg); }
+
+  .team-detail {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 0 16px 12px;
+  }
+
+  .team-detail.open { display: block; }
+
+  .golfer-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0ece4;
+    gap: 10px;
+  }
+
+  .golfer-row:last-child { border-bottom: none; }
+
+  .golfer-name {
+    flex: 1;
+    font-size: 14px;
+  }
+
+  .golfer-name.counting { font-weight: 600; }
+  .golfer-name.dropped { color: var(--muted); }
+
+  .golfer-score {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  .golfer-score.under { color: var(--under); }
+  .golfer-score.over { color: var(--over); }
+  .golfer-score.even { color: var(--even); }
+  .golfer-score.cut { color: var(--cut); font-weight: 400; font-style: italic; }
+
+  .golfer-status {
+    font-size: 11px;
+    min-width: 60px;
+    text-align: right;
+    color: var(--muted);
+  }
+
+  .counting-badge {
+    font-size: 10px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
+
+  .drop-badge {
+    font-size: 10px;
+    background: #f5f5f5;
+    color: #999;
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
+
+  .detail-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    padding-top: 4px;
+    text-align: center;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+    border-radius: 6px;
+    height: 16px;
+    margin: 4px 0;
+  }
+
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  .error-msg {
+    background: #fff3f3;
+    border: 1px solid #ffcdd2;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    color: var(--red);
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .legend span { display: flex; align-items: center; gap: 4px; }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 16px;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div>
+      <div class="header-title">⛳ Masters Pool 2026</div>
+      <div class="header-sub">Best 6 of 8 picks count · Augusta National</div>
+    </div>
+    <button class="refresh-btn" onclick="loadScores()">
+      <span id="refresh-icon">↻</span> Refresh
+    </button>
+  </div>
+  <div class="status-bar">
+    <span class="dot" id="status-dot"></span>
+    <span id="status-text">Loading scores...</span>
+  </div>
+</header>
+
+<main>
+  <div id="round-banner" class="round-banner" style="display:none"></div>
+  <div id="error-box" style="display:none" class="error-msg"></div>
+
+  <div class="legend">
+    <span><strong style="color:var(--under)">−</strong> Under par</span>
+    <span><strong style="color:var(--over)">+</strong> Over par</span>
+    <span><strong style="color:var(--even)">E</strong> Even</span>
+    <span><em style="color:var(--cut)">CUT</em> Not counting</span>
+  </div>
+
+  <div id="leaderboard"></div>
+</main>
+
+<footer>
+  Scores via ESPN · Auto-refreshes every 3 min during tournament<br>
+  Best 6 of 8 golfers count · CUT/WD scores not counted
+</footer>
+
+<script>
+// ============================================================
+//  TEAM CONFIGURATION — EDIT THIS SECTION
+//  Add your 10 teams below. Each team has a name and 8 golfer picks.
+//  Golfer names must match ESPN's spelling (Last, First or Full Name).
+//  Use the exact name as shown on the leaderboard.
+// ============================================================
+const TEAMS = [
+  {
+    name: "Team Alpha",
+    picks: [
+      "Scheffler, Scottie",
+      "McIlroy, Rory",
+      "Rahm, Jon",
+      "DeChambeau, Bryson",
+      "Åberg, Ludvig",
+      "Schauffele, Xander",
+      "Morikawa, Collin",
+      "Thomas, Justin"
+    ]
+  },
+  {
+    name: "Team Bravo",
+    picks: [
+      "Scheffler, Scottie",
+      "Spieth, Jordan",
+      "Fleetwood, Tommy",
+      "Hovland, Viktor",
+      "Burns, Sam",
+      "Cantlay, Patrick",
+      "Kim, Tom",
+      "Homa, Max"
+    ]
+  },
+  {
+    name: "Team Charlie",
+    picks: [
+      "McIlroy, Rory",
+      "Rahm, Jon",
+      "Schauffele, Xander",
+      "Fleetwood, Tommy",
+      "Finau, Tony",
+      "Rose, Justin",
+      "Garcia, Sergio",
+      "Im, Sungjae"
+    ]
+  },
+  {
+    name: "Team Delta",
+    picks: [
+      "Scheffler, Scottie",
+      "DeChambeau, Bryson",
+      "Åberg, Ludvig",
+      "Morikawa, Collin",
+      "Hatton, Tyrrell",
+      "Young, Cameron",
+      "Lowry, Shane",
+      "Meronk, Adrian"
+    ]
+  },
+  {
+    name: "Team Echo",
+    picks: [
+      "McIlroy, Rory",
+      "Spieth, Jordan",
+      "Thomas, Justin",
+      "Cantlay, Patrick",
+      "Fowler, Rickie",
+      "MacIntyre, Robert",
+      "Straka, Sepp",
+      "Power, Seamus"
+    ]
+  },
+  {
+    name: "Team Foxtrot",
+    picks: [
+      "Rahm, Jon",
+      "Schauffele, Xander",
+      "DeChambeau, Bryson",
+      "Hovland, Viktor",
+      "Homa, Max",
+      "Kim, Tom",
+      "Detry, Thomas",
+      "Coetzee, George"
+    ]
+  },
+  {
+    name: "Team Golf",
+    picks: [
+      "Scheffler, Scottie",
+      "Åberg, Ludvig",
+      "Fleetwood, Tommy",
+      "Burns, Sam",
+      "Im, Sungjae",
+      "Gotterup, Chris",
+      "Bridgeman, Jacob",
+      "Griffin, Ben"
+    ]
+  },
+  {
+    name: "Team Hotel",
+    picks: [
+      "McIlroy, Rory",
+      "Morikawa, Collin",
+      "Hatton, Tyrrell",
+      "Young, Cameron",
+      "Rose, Justin",
+      "Finau, Tony",
+      "Hardy, Nick",
+      "Reitan, Kristoffer"
+    ]
+  },
+  {
+    name: "Team India",
+    picks: [
+      "Scheffler, Scottie",
+      "Rahm, Jon",
+      "Thomas, Justin",
+      "Spieth, Jordan",
+      "MacIntyre, Robert",
+      "Lowry, Shane",
+      "Straka, Sepp",
+      "Cink, Stewart"
+    ]
+  },
+  {
+    name: "Team Juliet",
+    picks: [
+      "McIlroy, Rory",
+      "DeChambeau, Bryson",
+      "Schauffele, Xander",
+      "Hovland, Viktor",
+      "Cantlay, Patrick",
+      "Garcia, Sergio",
+      "Fowler, Rickie",
+      "Meronk, Adrian"
+    ]
+  }
+];
+
+// ============================================================
+//  APP LOGIC — no need to edit below this line
+// ============================================================
+
+let liveScores = {};
+let currentRound = '';
+
+function scoreClass(val) {
+  if (val === null) return 'cut';
+  if (val < 0) return 'under';
+  if (val > 0) return 'over';
+  return 'even';
+}
+
+function formatScore(val) {
+  if (val === null) return 'CUT';
+  if (val === 0) return 'E';
+  return val > 0 ? '+' + val : '' + val;
+}
+
+function normalizeName(name) {
+  return name.toLowerCase().replace(/[^a-z]/g, '');
+}
+
+function matchPlayer(pickName, espnName) {
+  const p = normalizeName(pickName);
+  const e = normalizeName(espnName);
+  if (p === e) return true;
+  const parts = espnName.split(', ');
+  if (parts.length === 2) {
+    const reversed = normalizeName(parts[1] + parts[0]);
+    if (p === reversed) return true;
+    if (e.includes(p) || p.includes(e)) return true;
+  }
+  return e.includes(p) || p.includes(e);
+}
+
+function getPlayerScore(pickName) {
+  for (const [espnName, data] of Object.entries(liveScores)) {
+    if (matchPlayer(pickName, espnName)) return data;
+  }
+  return null;
+}
+
+function calcTeamScore(picks) {
+  const scores = picks.map(p => {
+    const d = getPlayerScore(p);
+    return d ? d.score : null;
+  });
+
+  const valid = scores.filter(s => s !== null).sort((a, b) => a - b);
+  const counting = valid.slice(0, 6);
+  const total = counting.reduce((a, b) => a + b, 0);
+
+  return { scores, total, counting };
+}
+
+function renderLeaderboard() {
+  const results = TEAMS.map((team, i) => {
+    const { scores, total } = calcTeamScore(team.picks);
+    return { team, scores, total, idx: i };
+  }).sort((a, b) => a.total - b.total);
+
+  const lb = document.getElementById('leaderboard');
+  lb.innerHTML = '';
+
+  results.forEach((r, rank) => {
+    const { team, scores, total } = r;
+    const validScores = scores.filter(s => s !== null).sort((a, b) => a - b);
+    const countingSet = new Set();
+    let countLeft = 6;
+    validScores.forEach(s => { if (countLeft-- > 0) countingSet.add(s); });
+
+    const card = document.createElement('div');
+    card.className = 'team-card';
+
+    const badgeClass = rank === 0 ? 'gold' : rank === 1 ? 'silver' : rank === 2 ? 'bronze' : '';
+    const sc = scoreClass(total);
+    const countingCount = Math.min(scores.filter(s => s !== null).length, 6);
+
+    card.innerHTML = `
+      <div class="team-header" onclick="toggleDetail(this)">
+        <div class="rank-badge ${badgeClass}">${rank + 1}</div>
+        <div class="team-info">
+          <div class="team-name">${team.name}</div>
+          <div class="team-sub">${countingCount} of 8 scoring</div>
+        </div>
+        <div class="team-score">
+          <div class="score-total ${sc}">${formatScore(total)}</div>
+          <div class="score-label">team total</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="team-detail">
+        ${buildDetailRows(team.picks, scores)}
+        <div class="detail-note">★ = counting toward team score (best 6)</div>
+      </div>
+    `;
+
+    lb.appendChild(card);
+  });
+}
+
+function buildDetailRows(picks, scores) {
+  const validScores = scores.filter(s => s !== null).slice().sort((a, b) => a - b);
+  const countingScores = validScores.slice(0, 6);
+
+  const used = [...countingScores];
+  const isCounting = scores.map(s => {
+    if (s === null) return false;
+    const idx = used.indexOf(s);
+    if (idx !== -1) { used.splice(idx, 1); return true; }
+    return false;
+  });
+
+  return picks.map((name, i) => {
+    const data = getPlayerScore(name);
+    const s = scores[i];
+    const counting = isCounting[i];
+    const sc = scoreClass(s);
+    const status = data ? data.status : '–';
+    const badge = s === null
+      ? `<span class="drop-badge">CUT/–</span>`
+      : counting
+        ? `<span class="counting-badge">★ counts</span>`
+        : `<span class="drop-badge">dropped</span>`;
+
+    return `
+      <div class="golfer-row">
+        <div class="golfer-name ${counting ? 'counting' : 'dropped'}">${name}</div>
+        ${badge}
+        <div class="golfer-score ${sc}">${formatScore(s)}</div>
+        <div class="golfer-status">${status}</div>
+      </div>`;
+  }).join('');
+}
+
+function toggleDetail(header) {
+  const detail = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = detail.classList.contains('open');
+  document.querySelectorAll('.team-detail.open').forEach(d => {
+    d.classList.remove('open');
+    d.previousElementSibling.querySelector('.chevron').classList.remove('open');
+  });
+  if (!isOpen) {
+    detail.classList.add('open');
+    chevron.classList.add('open');
+  }
+}
+
+function setStatus(type, msg) {
+  const dot = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  dot.className = 'dot ' + type;
+  text.textContent = msg;
+}
+
+async function loadScores() {
+  setStatus('loading', 'Fetching live scores...');
+  document.getElementById('error-box').style.display = 'none';
+
+  try {
+    const res = await fetch(
+      'https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401703510',
+      { cache: 'no-store' }
+    );
+    if (!res.ok) throw new Error('ESPN API returned ' + res.status);
+    const data = await res.json();
+
+    const competition = data?.events?.[0]?.competitions?.[0];
+    if (!competition) throw new Error('No competition data found');
+
+    const round = competition.status?.type?.description || '';
+    currentRound = round;
+
+    const banner = document.getElementById('round-banner');
+    if (round) { banner.textContent = round; banner.style.display = 'block'; }
+
+    liveScores = {};
+    const competitors = competition.competitors || [];
+    competitors.forEach(c => {
+      const name = c.athlete?.displayName || '';
+      const rawScore = c.score?.displayValue;
+      let score = null;
+      if (rawScore && rawScore !== 'E' && rawScore !== '--') {
+        const n = parseInt(rawScore);
+        score = isNaN(n) ? null : n;
+      } else if (rawScore === 'E') {
+        score = 0;
+      }
+      const status = c.status?.type?.shortDetail || c.status?.displayValue || '';
+      liveScores[name] = { score, status };
+    });
+
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setStatus('', `Live · Updated ${now}`);
+
+    renderLeaderboard();
+  } catch (err) {
+    console.error(err);
+    setStatus('error', 'Could not load scores');
+    const eb = document.getElementById('error-box');
+    eb.style.display = 'block';
+    eb.textContent = '⚠ Could not fetch live scores. Scores shown may be outdated. Tap Refresh to try again.';
+
+    if (Object.keys(liveScores).length === 0) {
+      renderFallback();
+    } else {
+      renderLeaderboard();
+    }
+  }
+}
+
+function renderFallback() {
+  TEAMS.forEach(t => t.picks.forEach(p => {
+    if (!liveScores[p]) liveScores[p] = { score: null, status: '–' };
+  }));
+  renderLeaderboard();
+}
+
+loadScores();
+setInterval(loadScores, 180000);
+</script>
+</body>
+</html>
