@@ -159,27 +159,27 @@ const liveScores = {
   'Sam Burns': { score: -5, status: 'F', rounds: [] },
   'Rory McIlroy': { score: -5, status: 'F', rounds: [] },
   'Patrick Reed': { score: -3, status: 'F', rounds: [] },
-  'Justin Rose': { score: -3, status: 'Thru 9', rounds: [] },
-  'Scottie Scheffler': { score: -3, status: 'Thru 8', rounds: [] },
+  'Justin Rose': { score: -3, status: 'Thru 11', rounds: [] },
+  'Scottie Scheffler': { score: -3, status: 'Thru 9', rounds: [] },
   'Shane Lowry': { score: -2, status: 'F', rounds: [] },
   'Xander Schauffele': { score: -2, status: 'F', rounds: [] },
-  'Justin Thomas': { score: -2, status: 'Thru 9', rounds: [] },
+  'Justin Thomas': { score: -2, status: 'Thru 10', rounds: [] },
   'Nick Taylor': { score: -1, status: 'F', rounds: [] },
-  'Ludvig Aberg': { score: 0, status: 'Thru 10', rounds: [] },
-  'Brooks Koepka': { score: 0, status: 'Thru 9', rounds: [] },
+  'Sepp Straka': { score: 0, status: 'Thru 10', rounds: [] },
+  'Ludvig Aberg': { score: 1, status: 'Thru 12', rounds: [] },
+  'Brooks Koepka': { score: 1, status: 'Thru 11', rounds: [] },
   'Akshay Bhatia': { score: 1, status: 'F', rounds: [] },
   'Cameron Young': { score: 1, status: 'F', rounds: [] },
-  'Corey Conners': { score: 1, status: 'Thru 11', rounds: [] },
-  'Nicolai Hojgaard': { score: 1, status: 'Thru 15', rounds: [] },
-  'Jacob Bridgeman': { score: 1, status: 'Thru 12', rounds: [] },
-  'Tyrrell Hatton': { score: 1, status: 'Thru 10', rounds: [] },
+  'Jacob Bridgeman': { score: 1, status: 'Thru 14', rounds: [] },
+  'Tyrrell Hatton': { score: 1, status: 'Thru 12', rounds: [] },
+  'Harris English': { score: 2, status: 'Thru 9', rounds: [] },
   'Matt Fitzpatrick': { score: 2, status: 'F', rounds: [] },
+  'Corey Conners': { score: 3, status: 'Thru 12', rounds: [] },
+  'Nicolai Hojgaard': { score: 3, status: 'Thru 17', rounds: [] },
   'Viktor Hovland': { score: 3, status: 'F', rounds: [] },
-  'Min Woo Lee': { score: 3, status: 'Thru 12', rounds: [] },
-  'Harris English': { score: 3, status: 'Thru 7', rounds: [] },
   'Bryson DeChambeau': { score: 4, status: 'F', rounds: [] },
   'Patrick Cantlay': { score: 5, status: 'F', rounds: [] },
-  'Sepp Straka': { score: -1, status: 'Thru 9', rounds: [] },
+  'Min Woo Lee': { score: 5, status: 'Thru 14', rounds: [] },
 };
 
 function scoreClass(val) {
@@ -277,7 +277,7 @@ function toggle(header) {
 function loadScores() {
   document.getElementById('status-pill').className = 'status-pill live';
   document.getElementById('status-dot').className = 'dot live';
-  document.getElementById('status-text').textContent = 'R1 Final';
+  document.getElementById('status-text').textContent = 'R1 In Progress';
   document.getElementById('updated-time').textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   renderLeaderboard();
 }
