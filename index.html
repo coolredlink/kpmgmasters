@@ -7,12 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --augusta: #1a3d2b;
     --augusta-deep: #122a1e;
-    --augusta-mid: #234d38;
-    --augusta-light: #2d6147;
     --cream: #f7f3ec;
     --cream-warm: #f0ebe0;
     --cream-border: rgba(240,235,224,0.12);
@@ -25,552 +22,96 @@
     --text-dim: rgba(247,243,236,0.35);
     --card-bg: rgba(255,255,255,0.055);
     --card-bg-hover: rgba(255,255,255,0.085);
-    --card-border: rgba(247,243,236,0.14);
-    --card-border-hover: rgba(247,243,236,0.28);
+    --card-border: rgba(247,243,236,0.22);
+    --card-border-hover: rgba(247,243,236,0.38);
     --under: #a8d5b5;
     --over: rgba(247,243,236,0.7);
     --even: rgba(247,243,236,0.7);
     --cut: rgba(247,243,236,0.2);
   }
-
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--augusta);
-    color: var(--text-bright);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* FULL BG GRADIENT — depth without photo */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45,97,71,0.5) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(18,42,30,0.7) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* HEADER */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--augusta-deep);
-    border-bottom: 1px solid var(--cream-border);
-  }
-
-  /* gold rule under header */
-  header::after {
-    content: '';
-    display: block;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0.7;
-  }
-
-  .header-inner {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 16px 20px 14px;
-  }
-
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
+  body { font-family: 'Inter', -apple-system, sans-serif; background: var(--augusta); color: var(--text-bright); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  body::after { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45,97,71,0.5) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(18,42,30,0.7) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+  header { position: sticky; top: 0; z-index: 100; background: var(--augusta-deep); border-bottom: 1px solid var(--cream-border); }
+  header::after { content: ''; display: block; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.7; }
+  .header-inner { max-width: 640px; margin: 0 auto; padding: 16px 20px 14px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .logo-area { display: flex; align-items: center; gap: 14px; }
-
-  .logo-mark {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 44px; height: 44px;
-    border: 1.5px solid var(--gold-dim);
-    border-radius: 8px;
-    background: var(--gold-glow);
-    flex-shrink: 0;
-    gap: 1px;
-  }
-
-  .logo-mark-flag {
-    width: 14px; height: 11px;
-    border-left: 2px solid var(--gold);
-    position: relative;
-  }
-
-  .logo-mark-flag::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 2px;
-    width: 10px; height: 7px;
-    background: var(--gold);
-    clip-path: polygon(0 0, 100% 35%, 0 70%);
-  }
-
-  .logo-mark-base {
-    width: 16px; height: 2px;
-    background: var(--gold);
-    border-radius: 1px;
-  }
-
-  .header-text {}
-
-  .header-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--text-bright);
-    letter-spacing: 0.1px;
-    line-height: 1.15;
-  }
-
-  .header-sub {
-    font-size: 10px;
-    color: var(--text-dim);
-    margin-top: 3px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-
-  .refresh-btn {
-    background: transparent;
-    border: 1px solid var(--cream-border-strong);
-    color: var(--text-mid);
-    padding: 7px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-    transition: all 0.15s;
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 0.3px;
-  }
-
-  .refresh-btn:hover {
-    background: var(--card-bg);
-    border-color: var(--card-border-hover);
-    color: var(--text-bright);
-  }
-
+  .logo-mark { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1.5px solid var(--gold-dim); border-radius: 8px; background: var(--gold-glow); flex-shrink: 0; gap: 1px; }
+  .logo-mark-flag { width: 14px; height: 11px; border-left: 2px solid var(--gold); position: relative; }
+  .logo-mark-flag::before { content: ''; position: absolute; top: 0; left: 2px; width: 10px; height: 7px; background: var(--gold); clip-path: polygon(0 0, 100% 35%, 0 70%); }
+  .logo-mark-base { width: 16px; height: 2px; background: var(--gold); border-radius: 1px; }
+  .header-title { font-family: 'Playfair Display', Georgia, serif; font-size: 19px; font-weight: 700; color: var(--text-bright); letter-spacing: 0.1px; line-height: 1.15; }
+  .header-sub { font-size: 10px; color: var(--text-dim); margin-top: 3px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; }
+  .refresh-btn { background: transparent; border: 1px solid var(--cream-border-strong); color: var(--text-mid); padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .refresh-btn:hover { background: var(--card-bg); color: var(--text-bright); }
   .refresh-btn:active { transform: scale(0.97); }
-
-  .status-bar {
-    margin-top: 11px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    border-radius: 4px;
-    padding: 3px 9px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    border: 1px solid var(--cream-border);
-  }
-
-  .status-pill.live {
-    border-color: var(--gold-dim);
-    color: var(--gold);
-  }
-
-  .status-pill.error {
-    border-color: var(--cream-border);
-    color: var(--text-dim);
-  }
-
-  .dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--text-dim);
-    flex-shrink: 0;
-  }
-
+  .status-bar { margin-top: 11px; display: flex; align-items: center; gap: 10px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 4px; padding: 3px 9px; font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-dim); border: 1px solid var(--cream-border); }
+  .status-pill.live { border-color: var(--gold-dim); color: var(--gold); }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
   .dot.live { background: var(--gold); animation: pulse 1.4s infinite; }
   .dot.loading { background: var(--gold); opacity: 0.5; animation: pulse 0.7s infinite; }
-  .dot.error { background: var(--text-dim); }
-
-  .updated-time {
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 0.2px;
-  }
-
+  .updated-time { font-size: 11px; color: var(--text-dim); }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-  /* MAIN */
-  main {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 28px 16px 64px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ROUND PILL */
-  .round-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: var(--card-bg);
-    border: 1px solid var(--gold-dim);
-    color: var(--gold);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    padding: 5px 13px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
-
-  .live-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--gold);
-    animation: pulse 1.2s infinite;
-    flex-shrink: 0;
-  }
-
-  /* LEGEND */
-  .legend {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-bottom: 20px;
-    letter-spacing: 0.2px;
-  }
-
+  main { max-width: 640px; margin: 0 auto; padding: 28px 16px 64px; position: relative; z-index: 1; }
+  .round-pill { display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg); border: 1px solid var(--gold-dim); color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 5px 13px; border-radius: 4px; margin-bottom: 20px; }
+  .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); animation: pulse 1.2s infinite; flex-shrink: 0; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 11px; color: var(--text-dim); margin-bottom: 20px; }
   .legend span { display: flex; align-items: center; gap: 5px; }
-
-  /* SECTION HEADER */
-  .section-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-
+  .section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .section-line { flex: 1; height: 1px; background: var(--cream-border); }
-
-  .section-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-
-  /* COL HEADERS */
-  .col-headers {
-    display: grid;
-    grid-template-columns: 38px 1fr 64px 22px;
-    gap: 8px;
-    padding: 0 14px 10px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-
-  /* TEAM CARD */
-  .team-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    margin-bottom: 6px;
-    overflow: hidden;
-    transition: background 0.15s, border-color 0.15s;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  .team-card:hover {
-    background: var(--card-bg-hover);
-    border-color: var(--card-border-hover);
-  }
-
-  /* LEADER CARD — gold treatment */
-  .team-card.leader {
-    border-color: var(--gold-dim);
-    background: var(--gold-glow);
-  }
-
-  .team-card.leader:hover {
-    background: rgba(201,168,76,0.11);
-    border-color: rgba(201,168,76,0.5);
-  }
-
-  /* left accent bar on leader */
-  .team-card.leader .team-header {
-    border-left: 3px solid var(--gold);
-    padding-left: 13px;
-  }
-
-  .team-header {
-    display: grid;
-    grid-template-columns: 38px 1fr 64px 22px;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 14px;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  /* RANK */
-  .rank {
-    width: 28px; height: 28px;
-    border-radius: 5px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    flex-shrink: 0;
-    background: transparent;
-    color: var(--text-dim);
-    border: 1px solid var(--cream-border);
-    letter-spacing: -0.5px;
-    font-family: 'Inter', sans-serif;
-  }
-
-  .rank.r1 {
-    background: var(--gold-glow);
-    color: var(--gold);
-    border-color: var(--gold-dim);
-  }
-
-  .rank.r2 {
-    color: rgba(247,243,236,0.45);
-    border-color: rgba(247,243,236,0.12);
-  }
-
-  .rank.r3 {
-    color: rgba(210,170,120,0.7);
-    border-color: rgba(210,170,120,0.2);
-  }
-
-  /* TEAM INFO */
-  .team-name {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-bright);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-  }
-
-  .team-sub {
-    font-size: 10px;
-    color: var(--text-dim);
-    margin-top: 3px;
-    letter-spacing: 0.3px;
-    font-weight: 500;
-  }
-
-  /* SCORE */
-  .score-num {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.5px;
-  }
-
+  .section-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+  .col-headers { display: grid; grid-template-columns: 38px 1fr 64px 22px; gap: 8px; padding: 0 14px 10px; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
+  .team-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; margin-bottom: 6px; overflow: hidden; transition: background 0.15s, border-color 0.15s; }
+  .team-card:hover { background: var(--card-bg-hover); border-color: var(--card-border-hover); }
+  .team-card.leader { border-color: var(--gold-dim); background: var(--gold-glow); }
+  .team-card.leader:hover { background: rgba(201,168,76,0.11); border-color: rgba(201,168,76,0.5); }
+  .team-card.leader .team-header { border-left: 3px solid var(--gold); padding-left: 13px; }
+  .team-header { display: grid; grid-template-columns: 38px 1fr 64px 22px; align-items: center; gap: 8px; padding: 11px 14px; cursor: pointer; user-select: none; }
+  .rank { width: 28px; height: 28px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; background: transparent; color: var(--text-dim); border: 1px solid var(--cream-border); letter-spacing: -0.5px; }
+  .rank.r1 { background: var(--gold-glow); color: var(--gold); border-color: var(--gold-dim); }
+  .rank.r2 { color: rgba(247,243,236,0.45); border-color: rgba(247,243,236,0.12); }
+  .rank.r3 { color: rgba(210,170,120,0.7); border-color: rgba(210,170,120,0.2); }
+  .team-name { font-family: 'Playfair Display', Georgia, serif; font-size: 17px; font-weight: 700; color: var(--text-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+  .score-num { font-size: 20px; font-weight: 700; line-height: 1; text-align: right; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
   .score-num.under { color: var(--under); }
   .score-num.over { color: var(--over); }
   .score-num.even { color: var(--even); }
-
-  /* CHEVRON */
-  .chevron {
-    width: 14px; height: 14px;
-    color: var(--text-dim);
-    transition: transform 0.25s ease;
-    flex-shrink: 0;
-    justify-self: end;
-  }
-
+  .chevron { width: 14px; height: 14px; color: var(--text-dim); transition: transform 0.25s ease; flex-shrink: 0; justify-self: end; }
   .chevron.open { transform: rotate(180deg); }
-
-  /* DETAIL PANEL */
-  .detail-wrap {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.3s ease;
-  }
-
+  .detail-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
   .detail-wrap.open { grid-template-rows: 1fr; }
-
-  .team-detail {
-    overflow: hidden;
-    border-top: 0px solid var(--cream-border);
-    transition: border-top-width 0.3s;
-    background: rgba(0,0,0,0.12);
-  }
-
+  .team-detail { overflow: hidden; border-top: 0px solid var(--cream-border); transition: border-top-width 0.3s; background: rgba(0,0,0,0.12); }
   .detail-wrap.open .team-detail { border-top-width: 1px; }
-
   .detail-inner { padding: 6px 14px 12px; }
-
-  .detail-golfer {
-    display: grid;
-    grid-template-columns: 1fr auto auto auto;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--cream-border);
-  }
-
+  .detail-golfer { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--cream-border); }
   .detail-golfer:last-of-type { border-bottom: none; }
-
-  .g-name {
-    font-size: 13px;
-    color: var(--text-mid);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .g-name.counting {
-    color: var(--text-bright);
-    font-weight: 600;
-  }
-
-  .g-badge {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 3px;
-    white-space: nowrap;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  .g-badge.counts {
-    background: rgba(168,213,181,0.12);
-    color: var(--under);
-    border: 1px solid rgba(168,213,181,0.2);
-  }
-
-  .g-badge.drop {
-    background: rgba(247,243,236,0.05);
-    color: var(--text-dim);
-    border: 1px solid var(--cream-border);
-  }
-
-  .g-score {
-    font-size: 13px;
-    font-weight: 700;
-    min-width: 36px;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-
+  .g-name { font-size: 13px; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .g-name.counting { color: var(--text-bright); font-weight: 600; }
+  .g-badge { font-size: 9px; padding: 2px 7px; border-radius: 3px; white-space: nowrap; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .g-badge.counts { background: rgba(168,213,181,0.12); color: var(--under); border: 1px solid rgba(168,213,181,0.2); }
+  .g-badge.drop { background: rgba(247,243,236,0.05); color: var(--text-dim); border: 1px solid var(--cream-border); }
+  .g-score { font-size: 13px; font-weight: 700; min-width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
   .g-score.under { color: var(--under); }
   .g-score.over { color: var(--over); }
   .g-score.even { color: var(--even); }
   .g-score.cut { color: var(--cut); font-weight: 400; }
-
   .g-rounds { display: flex; gap: 3px; margin-top: 3px; }
-
-  .g-round-score {
-    font-size: 9px;
-    padding: 1px 5px;
-    border-radius: 3px;
-    background: var(--cream-border);
-    color: var(--text-dim);
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-  }
-
-  .g-round-score.under { color: var(--under); background: rgba(168,213,181,0.08); }
-  .g-round-score.over { color: rgba(247,243,236,0.6); background: rgba(247,243,236,0.06); }
-
-  .g-status {
-    font-size: 10px;
-    color: var(--text-dim);
-    min-width: 44px;
-    text-align: right;
-    letter-spacing: 0.2px;
-  }
-
-  .detail-note {
-    font-size: 10px;
-    color: var(--text-dim);
-    margin-top: 10px;
-    text-align: center;
-    letter-spacing: 0.3px;
-  }
-
-  /* ERROR */
-  .error-msg {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    color: var(--text-dim);
-    font-size: 13px;
-    margin-bottom: 18px;
-    text-align: center;
-  }
-
-  /* FOOTER */
-  footer {
-    text-align: center;
-    font-size: 10px;
-    color: var(--text-dim);
-    padding: 8px 16px 32px;
-    max-width: 640px;
-    margin: 0 auto;
-    line-height: 2;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 1;
-  }
-
-  .footer-divider {
-    width: 40px;
-    height: 1px;
-    background: var(--gold-dim);
-    margin: 0 auto 12px;
-  }
+  .g-round-score { font-size: 9px; padding: 1px 5px; border-radius: 3px; background: var(--cream-border); color: var(--text-dim); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .g-status { font-size: 10px; color: var(--text-dim); min-width: 44px; text-align: right; }
+  .detail-note { font-size: 10px; color: var(--text-dim); margin-top: 10px; text-align: center; }
+  .error-msg { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px 16px; color: var(--text-dim); font-size: 13px; margin-bottom: 18px; text-align: center; }
+  footer { text-align: center; font-size: 10px; color: var(--text-dim); padding: 8px 16px 32px; max-width: 640px; margin: 0 auto; line-height: 2; letter-spacing: 0.5px; text-transform: uppercase; position: relative; z-index: 1; }
+  .footer-divider { width: 40px; height: 1px; background: var(--gold-dim); margin: 0 auto 12px; }
 </style>
 </head>
 <body>
-
 <header>
   <div class="header-inner">
     <div class="header-top">
       <div class="logo-area">
-        <div class="logo-mark">
-          <div class="logo-mark-flag"></div>
-          <div class="logo-mark-base"></div>
-        </div>
-        <div class="header-text">
+        <div class="logo-mark"><div class="logo-mark-flag"></div><div class="logo-mark-base"></div></div>
+        <div>
           <div class="header-title">Masters Pool 2026</div>
           <div class="header-sub">Augusta National &nbsp;·&nbsp; Best 6 of 8</div>
         </div>
@@ -578,19 +119,14 @@
       <button class="refresh-btn" onclick="loadScores()">↻ &nbsp;Refresh</button>
     </div>
     <div class="status-bar">
-      <div class="status-pill" id="status-pill">
-        <span class="dot loading" id="status-dot"></span>
-        <span id="status-text">Loading</span>
-      </div>
+      <div class="status-pill" id="status-pill"><span class="dot loading" id="status-dot"></span><span id="status-text">Loading</span></div>
       <span class="updated-time" id="updated-time"></span>
     </div>
   </div>
 </header>
-
 <main>
   <div id="round-banner" style="display:none"></div>
   <div id="error-box" class="error-msg" style="display:none"></div>
-
   <div class="legend">
     <span><strong style="color:var(--under)">−</strong> Under par</span>
     <span><strong style="color:var(--over)">+</strong> Over par</span>
@@ -598,67 +134,53 @@
     <span style="color:var(--cut)">CUT doesn't count</span>
     <span><strong style="color:var(--gold)">★</strong> Counting</span>
   </div>
-
-  <div class="section-head">
-    <div class="section-line"></div>
-    <div class="section-label">Leaderboard</div>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="col-headers">
-    <div></div>
-    <div>Team</div>
-    <div style="text-align:right">Score</div>
-    <div></div>
-  </div>
-
+  <div class="section-head"><div class="section-line"></div><div class="section-label">Leaderboard</div><div class="section-line"></div></div>
+  <div class="col-headers"><div></div><div>Team</div><div style="text-align:right">Score</div><div></div></div>
   <div id="leaderboard"></div>
 </main>
-
 <footer>
   <div class="footer-divider"></div>
-  Scores via ESPN &nbsp;·&nbsp; Auto-refreshes every 3 min<br>
-  CUT / WD dropped automatically &nbsp;·&nbsp; Best 6 of 8 count
+  Scores updated manually · Best 6 of 8 count<br>
+  CUT / WD dropped automatically
 </footer>
-
 <script>
 const TEAMS = [
-  {
-    name: "Felix",
-    picks: ["Scottie Scheffler","Bryson DeChambeau","Xander Schauffele","Ludvig Aberg","Min Woo Lee","Akshay Bhatia","Nicolai Hojgaard","Corey Conners"]
-  },
-  {
-    name: "Alain",
-    picks: ["Scottie Scheffler","Rory McIlroy","Xander Schauffele","Ludvig Aberg","Justin Thomas","Patrick Cantlay","Harris English","Nicolai Hojgaard"]
-  },
-  {
-    name: "Guillaume",
-    picks: ["Scottie Scheffler","Rory McIlroy","Justin Rose","Ludvig Aberg","Sepp Straka","Min Woo Lee","Corey Conners","Sam Burns"]
-  },
-  {
-    name: "Jonathan",
-    picks: ["Scottie Scheffler","Bryson DeChambeau","Justin Rose","Ludvig Aberg","Justin Thomas","Shane Lowry","Nick Taylor","Corey Conners"]
-  },
-  {
-    name: "Benjamin",
-    picks: ["Scottie Scheffler","Bryson DeChambeau","Justin Rose","Ludvig Aberg","Justin Thomas","Akshay Bhatia","Sam Burns","Corey Conners"]
-  },
-  {
-    name: "Marc",
-    picks: ["Scottie Scheffler","Cameron Young","Justin Rose","Viktor Hovland","Justin Thomas","Brooks Koepka","Harris English","Corey Conners"]
-  },
-  {
-    name: "Jesse",
-    picks: ["Scottie Scheffler","Bryson DeChambeau","Matt Fitzpatrick","Ludvig Aberg","Tyrrell Hatton","Min Woo Lee","Sam Burns","Jacob Bridgeman"]
-  },
-  {
-    name: "Laurent",
-    picks: ["Scottie Scheffler","Cameron Young","Matt Fitzpatrick","Xander Schauffele","Min Woo Lee","Sam Burns","Justin Thomas","Corey Conners"]
-  }
+  { name: "Felix", picks: ["Scottie Scheffler","Bryson DeChambeau","Xander Schauffele","Ludvig Aberg","Min Woo Lee","Akshay Bhatia","Nicolai Hojgaard","Corey Conners"] },
+  { name: "Alain", picks: ["Scottie Scheffler","Rory McIlroy","Xander Schauffele","Ludvig Aberg","Justin Thomas","Patrick Cantlay","Harris English","Nicolai Hojgaard"] },
+  { name: "Guillaume", picks: ["Scottie Scheffler","Rory McIlroy","Justin Rose","Ludvig Aberg","Sepp Straka","Min Woo Lee","Corey Conners","Sam Burns"] },
+  { name: "Jonathan", picks: ["Scottie Scheffler","Bryson DeChambeau","Justin Rose","Ludvig Aberg","Justin Thomas","Shane Lowry","Nick Taylor","Corey Conners"] },
+  { name: "Benjamin", picks: ["Scottie Scheffler","Bryson DeChambeau","Justin Rose","Ludvig Aberg","Justin Thomas","Akshay Bhatia","Sam Burns","Corey Conners"] },
+  { name: "Marc", picks: ["Scottie Scheffler","Cameron Young","Justin Rose","Viktor Hovland","Justin Thomas","Brooks Koepka","Harris English","Corey Conners"] },
+  { name: "Jesse", picks: ["Scottie Scheffler","Bryson DeChambeau","Matt Fitzpatrick","Ludvig Aberg","Tyrrell Hatton","Min Woo Lee","Sam Burns","Jacob Bridgeman"] },
+  { name: "Laurent", picks: ["Scottie Scheffler","Cameron Young","Matt Fitzpatrick","Xander Schauffele","Min Woo Lee","Sam Burns","Justin Thomas","Corey Conners"] }
 ];
 
-let liveScores = {};
-let lastUpdated = null;
+const liveScores = {
+  'Sam Burns': { score: -5, status: 'F', rounds: [] },
+  'Rory McIlroy': { score: -5, status: 'F', rounds: [] },
+  'Patrick Reed': { score: -3, status: 'F', rounds: [] },
+  'Justin Rose': { score: -3, status: 'Thru 9', rounds: [] },
+  'Scottie Scheffler': { score: -3, status: 'Thru 8', rounds: [] },
+  'Shane Lowry': { score: -2, status: 'F', rounds: [] },
+  'Xander Schauffele': { score: -2, status: 'F', rounds: [] },
+  'Justin Thomas': { score: -2, status: 'Thru 9', rounds: [] },
+  'Nick Taylor': { score: -1, status: 'F', rounds: [] },
+  'Ludvig Aberg': { score: 0, status: 'Thru 10', rounds: [] },
+  'Brooks Koepka': { score: 0, status: 'Thru 9', rounds: [] },
+  'Akshay Bhatia': { score: 1, status: 'F', rounds: [] },
+  'Cameron Young': { score: 1, status: 'F', rounds: [] },
+  'Corey Conners': { score: 1, status: 'Thru 11', rounds: [] },
+  'Nicolai Hojgaard': { score: 1, status: 'Thru 15', rounds: [] },
+  'Jacob Bridgeman': { score: 1, status: 'Thru 12', rounds: [] },
+  'Tyrrell Hatton': { score: 1, status: 'Thru 10', rounds: [] },
+  'Matt Fitzpatrick': { score: 2, status: 'F', rounds: [] },
+  'Viktor Hovland': { score: 3, status: 'F', rounds: [] },
+  'Min Woo Lee': { score: 3, status: 'Thru 12', rounds: [] },
+  'Harris English': { score: 3, status: 'Thru 7', rounds: [] },
+  'Bryson DeChambeau': { score: 4, status: 'F', rounds: [] },
+  'Patrick Cantlay': { score: 5, status: 'F', rounds: [] },
+  'Sepp Straka': { score: -1, status: 'Thru 9', rounds: [] },
+};
 
 function scoreClass(val) {
   if (val === null) return 'cut';
@@ -680,11 +202,6 @@ function getScore(pick) {
   for (const [name, data] of Object.entries(liveScores)) {
     const e = norm(name);
     if (p === e) return data;
-    const parts = name.split(', ');
-    if (parts.length === 2) {
-      if (norm(parts[1] + parts[0]) === p) return data;
-      if (norm(parts[0] + parts[1]) === p) return data;
-    }
     if (e.length > 5 && p.length > 5 && (e.includes(p) || p.includes(e))) return data;
   }
   return null;
@@ -697,14 +214,6 @@ function calcTeam(picks) {
   return { scores, total };
 }
 
-function buildRoundPips(rounds) {
-  if (!rounds || rounds.length === 0) return '';
-  return `<div class="g-rounds">${rounds.map((r, i) => {
-    const sc = r < 0 ? 'under' : r > 0 ? 'over' : '';
-    return `<span class="g-round-score ${sc}">R${i+1} ${fmt(r)}</span>`;
-  }).join('')}</div>`;
-}
-
 function buildDetail(picks, scores) {
   const validSorted = scores.filter(s => s !== null).slice().sort((a, b) => a - b);
   const countingPool = [...validSorted.slice(0, 6)];
@@ -714,29 +223,14 @@ function buildDetail(picks, scores) {
     if (i !== -1) { countingPool.splice(i, 1); return true; }
     return false;
   });
-
   return picks.map((name, i) => {
     const s = scores[i];
     const data = getScore(name);
     const counting = isCounting[i];
     const sc = scoreClass(s);
-    const status = data?.status || '–';
-    const rounds = data?.rounds || [];
-    const badge = s === null
-      ? `<span class="g-badge drop">Cut</span>`
-      : counting
-        ? `<span class="g-badge counts">★ Counts</span>`
-        : `<span class="g-badge drop">Dropped</span>`;
-
-    return `<div class="detail-golfer">
-      <div>
-        <div class="g-name ${counting ? 'counting' : ''}">${name}</div>
-        ${buildRoundPips(rounds)}
-      </div>
-      ${badge}
-      <div class="g-score ${sc}">${fmt(s)}</div>
-      <div class="g-status">${status}</div>
-    </div>`;
+    const status = data ? data.status : '-';
+    const badge = s === null ? '<span class="g-badge drop">Cut</span>' : counting ? '<span class="g-badge counts">★ Counts</span>' : '<span class="g-badge drop">Dropped</span>';
+    return '<div class="detail-golfer"><div><div class="g-name ' + (counting ? 'counting' : '') + '">' + name + '</div></div>' + badge + '<div class="g-score ' + sc + '">' + fmt(s) + '</div><div class="g-status">' + status + '</div></div>';
   }).join('');
 }
 
@@ -761,32 +255,10 @@ function renderLeaderboard() {
     const sc = scoreClass(total);
     const rankStr = getTiedRank(sorted, rank);
     const isFirst = rankStr === '1' || rankStr === 'T1';
-    const rankClass = (rankStr === '1' || rankStr === 'T1') ? 'r1' :
-                      (rankStr === '2' || rankStr === 'T2') ? 'r2' :
-                      (rankStr === '3' || rankStr === 'T3') ? 'r3' : '';
-    const scoring = Math.min(scores.filter(s => s !== null).length, 6);
-
+    const rankClass = (rankStr === '1' || rankStr === 'T1') ? 'r1' : (rankStr === '2' || rankStr === 'T2') ? 'r2' : (rankStr === '3' || rankStr === 'T3') ? 'r3' : '';
     const card = document.createElement('div');
     card.className = 'team-card' + (isFirst ? ' leader' : '');
-    card.innerHTML = `
-      <div class="team-header" onclick="toggle(this)">
-        <div class="rank ${rankClass}">${rankStr}</div>
-        <div>
-        <div class="team-name">${team.name}</div>
-        </div>
-        <div class="score-num ${sc}">${fmt(total)}</div>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      </div>
-      <div class="detail-wrap">
-        <div class="team-detail">
-          <div class="detail-inner">
-            ${buildDetail(team.picks, scores)}
-            <div class="detail-note">Best 6 of 8 picks count · Lowest scores selected automatically</div>
-          </div>
-        </div>
-      </div>`;
+    card.innerHTML = '<div class="team-header" onclick="toggle(this)"><div class="rank ' + rankClass + '">' + rankStr + '</div><div><div class="team-name">' + team.name + '</div></div><div class="score-num ' + sc + '">' + fmt(total) + '</div><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="detail-wrap"><div class="team-detail"><div class="detail-inner">' + buildDetail(team.picks, scores) + '<div class="detail-note">Best 6 of 8 picks count</div></div></div></div>';
     lb.appendChild(card);
   });
 }
@@ -802,137 +274,15 @@ function toggle(header) {
   if (!wasOpen) { wrap.classList.add('open'); chevron.classList.add('open'); }
 }
 
-function setStatus(state, msg) {
-  const pill = document.getElementById('status-pill');
-  const dot = document.getElementById('status-dot');
-  const text = document.getElementById('status-text');
-  const timeEl = document.getElementById('updated-time');
-  dot.className = 'dot ' + state;
-  pill.className = 'status-pill ' + (state === 'live' ? 'live' : state === 'error' ? 'error' : '');
-  text.textContent = msg;
-  if (state === 'live' && lastUpdated) {
-    timeEl.textContent = 'Updated ' + lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  } else {
-    timeEl.textContent = '';
-  }
-}
-
-// Show manual scores immediately on page load without waiting for API
-const MANUAL_SCORES_INIT = {
-  'Sam Burns': { score: -5, status: 'F', rounds: [] },
-  'Rory McIlroy': { score: -5, status: 'Thru 16', rounds: [] },
-  'Patrick Reed': { score: -3, status: 'F', rounds: [] },
-  'Ludvig Aberg': { score: -3, status: 'Thru 8', rounds: [] },
-  'Scottie Scheffler': { score: -3, status: 'Thru 6', rounds: [] },
-  'Shane Lowry': { score: -2, status: 'F', rounds: [] },
-  'Xander Schauffele': { score: -2, status: 'Thru 17', rounds: [] },
-  'Justin Rose': { score: -2, status: 'Thru 7', rounds: [] },
-  'Justin Thomas': { score: -2, status: 'Thru 7', rounds: [] },
-  'Nick Taylor': { score: -1, status: 'F', rounds: [] },
-  'Corey Conners': { score: 0, status: 'Thru 9', rounds: [] },
-  'Brooks Koepka': { score: 0, status: 'Thru 7', rounds: [] },
-  'Matt Fitzpatrick': { score: 0, status: 'Thru 17', rounds: [] },
-  'Akshay Bhatia': { score: 1, status: 'F', rounds: [] },
-  'Harris English': { score: 1, status: 'Thru 5', rounds: [] },
-  'Nicolai Hojgaard': { score: 1, status: 'Thru 13', rounds: [] },
-  'Jacob Bridgeman': { score: 1, status: 'Thru 9', rounds: [] },
-  'Tyrrell Hatton': { score: 1, status: 'Thru 8', rounds: [] },
-  'Cameron Young': { score: 1, status: 'Thru 16', rounds: [] },
-  'Bryson DeChambeau': { score: 3, status: 'Thru 17', rounds: [] },
-  'Viktor Hovland': { score: 3, status: 'Thru 15', rounds: [] },
-  'Min Woo Lee': { score: 4, status: 'Thru 10', rounds: [] },
-  'Patrick Cantlay': { score: 4, status: 'Thru 16', rounds: [] },
-};
-Object.assign(liveScores, MANUAL_SCORES_INIT);
-renderLeaderboard();
-
-const SLASHGOLF_KEY = '720d9a8b3emsh762a2cde8216d34p161f66jsn781c0290e0a2
-';
-
-async function loadScores() {
-  setStatus('loading', 'Fetching');
-  document.getElementById('error-box').style.display = 'none';
-
-  const manualScores = {
-    'Sam Burns': { score: -5, status: 'F', rounds: [] },
-    'Rory McIlroy': { score: -5, status: 'Thru 16', rounds: [] },
-    'Patrick Reed': { score: -3, status: 'F', rounds: [] },
-    'Ludvig Aberg': { score: -3, status: 'Thru 8', rounds: [] },
-    'Scottie Scheffler': { score: -3, status: 'Thru 6', rounds: [] },
-    'Shane Lowry': { score: -2, status: 'F', rounds: [] },
-    'Xander Schauffele': { score: -2, status: 'Thru 17', rounds: [] },
-    'Justin Rose': { score: -2, status: 'Thru 7', rounds: [] },
-    'Justin Thomas': { score: -2, status: 'Thru 7', rounds: [] },
-    'Nick Taylor': { score: -1, status: 'F', rounds: [] },
-    'Corey Conners': { score: 0, status: 'Thru 9', rounds: [] },
-    'Brooks Koepka': { score: 0, status: 'Thru 7', rounds: [] },
-    'Matt Fitzpatrick': { score: 0, status: 'Thru 17', rounds: [] },
-    'Akshay Bhatia': { score: 1, status: 'F', rounds: [] },
-    'Harris English': { score: 1, status: 'Thru 5', rounds: [] },
-    'Nicolai Hojgaard': { score: 1, status: 'Thru 13', rounds: [] },
-    'Jacob Bridgeman': { score: 1, status: 'Thru 9', rounds: [] },
-    'Tyrrell Hatton': { score: 1, status: 'Thru 8', rounds: [] },
-    'Cameron Young': { score: 1, status: 'Thru 16', rounds: [] },
-    'Bryson DeChambeau': { score: 3, status: 'Thru 17', rounds: [] },
-    'Viktor Hovland': { score: 3, status: 'Thru 15', rounds: [] },
-    'Min Woo Lee': { score: 4, status: 'Thru 10', rounds: [] },
-    'Patrick Cantlay': { score: 4, status: 'Thru 16', rounds: [] },
-  };
-
-  try {
-    const res = await fetch('https://live-golf-data.p.rapidapi.com/leaderboard?orgId=1&tournId=14&year=2026', {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': SLASHGOLF_KEY,
-        'x-rapidapi-host': 'live-golf-data.p.rapidapi.com'
-      }
-    });
-    if (!res.ok) throw new Error('SlashGolf ' + res.status);
-    const data = await res.json();
-    const players = data?.leaderboardRows || data?.players || data?.results || data?.leaderboard || [];
-    if (players.length) {
-      liveScores = {};
-      players.forEach(p => {
-        const first = p.firstName || p.first_name || p.playerFirstName || '';
-        const last = p.lastName || p.last_name || p.playerLastName || '';
-        const name = (first + ' ' + last).trim();
-        const rawScore = p.total || p.totalScore || p.toPar || p.score || null;
-        let score = null;
-        if (rawScore === 'E' || rawScore === 0) score = 0;
-        else if (rawScore !== null && rawScore !== '--') {
-          const n = parseInt(rawScore);
-          if (!isNaN(n)) score = n;
-        }
-        const thru = p.thru || p.holesPlayed || p.currentHole || '';
-        const status = (thru === 18 || thru === '18' || p.status === 'F') ? 'F' : thru ? 'Thru ' + thru : 'In Progress';
-        if (name) liveScores[name] = { score, status, rounds: [] };
-      });
-      lastUpdated = new Date();
-      setStatus('live', 'Live');
-    } else {
-      throw new Error('No players in response');
-    }
-  } catch (e) {
-    console.warn('SlashGolf error:', e.message);
-    setStatus('error', 'Scores loading...');
-    document.getElementById('error-box').style.display = 'block';
-    document.getElementById('error-box').textContent = 'Scores may load slowly — tap Refresh to retry.';
-    if (Object.keys(liveScores).length === 0) {
-      TEAMS.forEach(t => t.picks.forEach(p => {
-        if (!liveScores[p]) liveScores[p] = { score: null, status: '-', rounds: [] };
-      }));
-    }
-  }
-
-  Object.entries(manualScores).forEach(([name, data]) => {
-    liveScores[name] = data;
-  });
-
+function loadScores() {
+  document.getElementById('status-pill').className = 'status-pill live';
+  document.getElementById('status-dot').className = 'dot live';
+  document.getElementById('status-text').textContent = 'R1 Final';
+  document.getElementById('updated-time').textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   renderLeaderboard();
 }
 
 loadScores();
-setInterval(loadScores, 600000);
 </script>
 </body>
 </html>
