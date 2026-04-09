@@ -817,26 +817,19 @@ function setStatus(state, msg) {
   }
 }
 
-const SPORTSDATAIO_KEY = '7b3b85012ba64ee28111ce897b7a3f2e'; // paste your sportsdata.io key here
-
-async function loadFromSportsDataIO() {
-  const res = await fetch(`https://api.sportsdata.io/golf/v2/json/Leaderboard/28?key=${SPORTSDATAIO_KEY}`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('SportsDataIO failed: ' + res.status);
-  const data = await res.json();
-  if (!data?.Players) throw new Error('No player data');
-  liveScores = {};
-  data.Players.forEach(p => {
-    const name = `${p.FirstName} ${p.LastName}`;
-    const score = p.TotalScore ?? null;
-    const status = p.IsWithdrawn ? 'WD' : p.MadeCut === false ? 'CUT' : 'Active';
-    const rounds = (p.Rounds || []).map(r => r.Score ?? null).filter(s => s !== null);
-    liveScores[name] = { score, status, rounds };
-  });
-}
-
 async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
+
+  // Manual score overrides — remove once ESPN API is fully live
+  const manualScores = {
+    'Sam Burns': { score: -2, status: 'Active', rounds: [] },
+    'Shane Lowry': { score: -2, status: 'Active', rounds: [] },
+    'Nick Taylor': { score: -1, status: 'Active', rounds: [] },
+    'Akshay Bhatia': { score: -1, status: 'Active', rounds: [] },
+    'Patrick Reed': { score: -3, status: 'Active', rounds: [] },
+  };
+
   try {
     const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401811941', { cache: 'no-store' });
     if (!res.ok) throw new Error(res.status);
@@ -871,26 +864,23 @@ async function loadScores() {
     });
 
     lastUpdated = new Date();
-    setStatus('live', 'Live · ESPN');
-    renderLeaderboard();
-  } catch (espnErr) {
-    console.warn('ESPN failed, trying SportsData.io...', espnErr);
-    try {
-      await loadFromSportsDataIO();
-      lastUpdated = new Date();
-      setStatus('live', 'Live · SportsData');
-      renderLeaderboard();
-    } catch (sdErr) {
-      setStatus('error', 'Unavailable');
-      const eb = document.getElementById('error-box');
-      eb.style.display = 'block';
-      eb.textContent = 'Tournament scores unavailable — tap Refresh to retry.';
-      if (Object.keys(liveScores).length === 0) {
-        TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
-      }
-      renderLeaderboard();
+    setStatus('live', 'Live');
+  } catch (e) {
+    setStatus('error', 'Unavailable');
+    const eb = document.getElementById('error-box');
+    eb.style.display = 'block';
+    eb.textContent = 'Scores temporarily unavailable — tap Refresh to retry.';
+    if (Object.keys(liveScores).length === 0) {
+      TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
     }
   }
+
+  // Always apply manual overrides regardless of API result
+  Object.entries(manualScores).forEach(([name, data]) => {
+    liveScores[name] = data;
+  });
+
+  renderLeaderboard();
 }
 
 loadScores();
