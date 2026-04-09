@@ -821,7 +821,7 @@ async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
   try {
-    const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401703510', { cache: 'no-store' });
+    const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401811941', { cache: 'no-store' });
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     const comp = data?.events?.[0]?.competitions?.[0];
