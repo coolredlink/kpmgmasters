@@ -84,7 +84,7 @@
   .team-detail { overflow: hidden; border-top: 0px solid var(--cream-border); transition: border-top-width 0.3s; background: rgba(0,0,0,0.12); }
   .detail-wrap.open .team-detail { border-top-width: 1px; }
   .detail-inner { padding: 6px 14px 12px; }
-  .detail-golfer { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--cream-border); }
+  .detail-golfer { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--cream-border); }
   .detail-golfer:last-of-type { border-bottom: none; }
   .g-name { font-size: 13px; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .g-name.counting { color: var(--text-bright); font-weight: 600; }
@@ -232,7 +232,7 @@ function buildDetail(picks, scores) {
     const sc = scoreClass(s);
     const status = data ? data.status : '-';
     const badge = s === null ? '<span class="g-badge drop">Cut</span>' : counting ? '<span class="g-badge counts">★ Counts</span>' : '<span class="g-badge drop">Dropped</span>';
-    return '<div class="detail-golfer"><div><div class="g-name ' + (counting ? 'counting' : '') + '">' + name + '</div></div>' + badge + '<div class="g-score ' + sc + '">' + fmt(s) + '</div><div class="g-status">' + status + '</div></div>';
+    return '<div class="detail-golfer"><div><div class="g-name ' + (counting ? 'counting' : '') + '">' + name + '</div></div>' + badge + '<div class="g-score ' + sc + '">' + fmt(s) + '</div></div>';
   }).join('');
 }
 
