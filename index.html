@@ -8,34 +8,39 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --green-dark: #1b4d2e;
-    --green-mid: #2d6a4a;
-    --green-accent: #3a7d56;
-    --green-bg: #eef6f0;
-    --green-soft: #d4eadb;
-    --gold: #c8973a;
-    --gold-light: #fdf3e0;
-    --card: #ffffff;
-    --text: #1a1a1a;
-    --muted: #6b7a6e;
-    --border: #cde0d3;
-    --under: #1b6b36;
-    --over: #b83232;
-    --even: #444;
-    --cut: #aab4a0;
-    --row-hover: #f5fbf7;
+    --bg: #0d0f0e;
+    --surface: #151918;
+    --card: #1a1f1d;
+    --card-hover: #1f2522;
+    --border: #2a3230;
+    --border-bright: #3a4f44;
+    --green: #00e676;
+    --green-dim: #00b85a;
+    --green-glow: rgba(0,230,118,0.12);
+    --green-subtle: rgba(0,230,118,0.07);
+    --gold: #ffc84a;
+    --silver: #a8b8b0;
+    --bronze: #d4845a;
+    --text: #e8f0ec;
+    --text-muted: #6a8070;
+    --text-dim: #4a5e55;
+    --under: #e8f0ec;
+    --over: #e8f0ec;
+    --even: #e8f0ec;
+    --cut: #3a4f44;
   }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--green-bg);
+    background: var(--bg);
     color: var(--text);
     min-height: 100vh;
   }
 
   /* HEADER */
   header {
-    background: var(--green-dark);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     padding: 0 20px;
     position: sticky;
     top: 0;
@@ -45,7 +50,7 @@
   .header-inner {
     max-width: 640px;
     margin: 0 auto;
-    padding: 16px 0 12px;
+    padding: 14px 0 12px;
   }
 
   .header-top {
@@ -55,96 +60,124 @@
     gap: 12px;
   }
 
-  .logo-area { display: flex; align-items: center; gap: 10px; }
+  .logo-area { display: flex; align-items: center; gap: 12px; }
 
   .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--gold);
-    border-radius: 8px;
+    width: 38px; height: 38px;
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     font-size: 18px;
     flex-shrink: 0;
   }
 
   .header-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.3px;
+    color: var(--text);
+    letter-spacing: 0.2px;
   }
 
   .header-sub {
     font-size: 11px;
-    color: rgba(255,255,255,0.55);
-    margin-top: 1px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
   }
 
   .refresh-btn {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.9);
+    background: var(--green-subtle);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
     padding: 7px 14px;
     border-radius: 20px;
     font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 5px;
     white-space: nowrap;
     transition: background 0.15s;
+    letter-spacing: 0.3px;
   }
 
-  .refresh-btn:hover { background: rgba(255,255,255,0.18); }
+  .refresh-btn:hover { background: var(--green-glow); }
   .refresh-btn:active { transform: scale(0.97); }
 
+  /* STATUS BAR — more prominent */
   .status-bar {
     margin-top: 10px;
-    font-size: 11px;
-    color: rgba(255,255,255,0.5);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1a1f1d;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--text-muted);
+    transition: border-color 0.3s;
+  }
+
+  .status-pill.live { border-color: var(--green-dim); color: var(--green); }
+  .status-pill.error { border-color: var(--border-bright); color: var(--text-muted); }
 
   .dot {
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: #4caf50;
+    background: var(--text-dim);
     flex-shrink: 0;
   }
-  .dot.loading { background: var(--gold); animation: pulse 1s infinite; }
-  .dot.error { background: #ef5350; }
+  .dot.live { background: var(--green); animation: pulse 1.4s infinite; }
+  .dot.loading { background: var(--gold); animation: pulse 0.8s infinite; }
+  .dot.error { background: var(--text-muted); }
 
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  .updated-time {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
   /* MAIN */
   main {
     max-width: 640px;
     margin: 0 auto;
-    padding: 20px 16px 40px;
+    padding: 20px 16px 48px;
   }
 
   /* ROUND PILL */
   .round-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: var(--green-dark);
-    color: rgba(255,255,255,0.9);
+    gap: 7px;
+    background: var(--green-subtle);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
+    font-weight: 700;
+    letter-spacing: 1px;
     text-transform: uppercase;
     padding: 5px 12px;
     border-radius: 20px;
     margin-bottom: 16px;
   }
 
-  .round-pill .live-dot {
+  .live-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: #4caf50;
+    background: var(--green);
     animation: pulse 1.2s infinite;
+    flex-shrink: 0;
   }
 
   /* LEGEND */
@@ -153,65 +186,67 @@
     gap: 16px;
     flex-wrap: wrap;
     font-size: 11px;
-    color: var(--muted);
+    color: var(--text-muted);
     margin-bottom: 16px;
+    letter-spacing: 0.2px;
   }
 
-  .legend span { display: flex; align-items: center; gap: 4px; }
+  .legend span { display: flex; align-items: center; gap: 5px; }
 
   /* COLUMN HEADERS */
   .col-headers {
     display: grid;
-    grid-template-columns: 36px 1fr 60px 28px;
+    grid-template-columns: 36px 1fr 64px 28px;
     gap: 8px;
-    padding: 0 14px 6px;
+    padding: 0 14px 8px;
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
+    font-weight: 700;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--text-dim);
   }
 
   /* TEAM CARD */
   .team-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    margin-bottom: 8px;
+    border-radius: 12px;
+    margin-bottom: 6px;
     overflow: hidden;
-    transition: box-shadow 0.15s, border-color 0.15s;
+    transition: border-color 0.15s, background 0.15s;
   }
 
-  .team-card:hover { border-color: #a8c9b2; box-shadow: 0 2px 12px rgba(27,77,46,0.08); }
+  .team-card:hover { border-color: var(--border-bright); background: var(--card-hover); }
+  .team-card.leader { border-color: rgba(0,230,118,0.3); }
+  .team-card.leader .team-header { background: var(--green-subtle); }
 
   .team-header {
     display: grid;
-    grid-template-columns: 36px 1fr 60px 28px;
+    grid-template-columns: 36px 1fr 64px 28px;
     align-items: center;
     gap: 8px;
     padding: 13px 14px;
     cursor: pointer;
     user-select: none;
-    transition: background 0.1s;
   }
 
-  .team-header:hover { background: var(--row-hover); }
-
-  /* RANK */
+  /* RANK BADGE */
   .rank {
     width: 32px; height: 32px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     flex-shrink: 0;
-    background: var(--green-soft);
-    color: var(--green-dark);
+    background: #1f2a26;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    letter-spacing: -0.5px;
   }
 
-  .rank.r1 { background: var(--gold); color: white; }
-  .rank.r2 { background: #b0b8b0; color: white; }
-  .rank.r3 { background: #c07d3a; color: white; }
+  .rank.r1 { background: rgba(255,200,74,0.12); color: var(--gold); border-color: rgba(255,200,74,0.4); }
+  .rank.r2 { background: rgba(168,184,176,0.1); color: var(--silver); border-color: rgba(168,184,176,0.3); }
+  .rank.r3 { background: rgba(212,132,90,0.1); color: var(--bronze); border-color: rgba(212,132,90,0.3); }
 
   /* TEAM INFO */
   .team-name {
@@ -225,45 +260,56 @@
 
   .team-sub {
     font-size: 11px;
-    color: var(--muted);
-    margin-top: 1px;
+    color: var(--text-muted);
+    margin-top: 2px;
   }
 
   /* SCORE */
-  .team-score {
-    text-align: right;
-  }
-
   .score-num {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
 
-  .score-num.under { color: var(--under); }
+  .score-num.under { color: var(--green); }
   .score-num.over { color: var(--over); }
   .score-num.even { color: var(--even); }
 
   /* CHEVRON */
   .chevron {
-    width: 18px; height: 18px;
-    color: var(--muted);
-    transition: transform 0.2s;
+    width: 16px; height: 16px;
+    color: var(--text-dim);
+    transition: transform 0.25s ease;
     flex-shrink: 0;
     justify-self: end;
   }
 
   .chevron.open { transform: rotate(180deg); }
 
-  /* DETAIL PANEL */
-  .team-detail {
-    display: none;
-    background: #fafcfa;
-    border-top: 1px solid var(--border);
-    padding: 4px 14px 12px;
+  /* DETAIL PANEL — slide animation */
+  .detail-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s ease;
   }
 
-  .team-detail.open { display: block; }
+  .detail-wrap.open { grid-template-rows: 1fr; }
+
+  .team-detail {
+    overflow: hidden;
+    background: #131716;
+    border-top: 0px solid var(--border);
+    transition: border-top-width 0.28s;
+  }
+
+  .detail-wrap.open .team-detail {
+    border-top-width: 1px;
+  }
+
+  .detail-inner { padding: 4px 14px 10px; }
 
   .detail-golfer {
     display: grid;
@@ -271,67 +317,88 @@
     align-items: center;
     gap: 8px;
     padding: 8px 0;
-    border-bottom: 1px solid #edf3ef;
+    border-bottom: 1px solid #1e2724;
   }
 
   .detail-golfer:last-of-type { border-bottom: none; }
 
   .g-name {
     font-size: 13px;
-    color: var(--text);
+    color: var(--text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .g-name.counting { font-weight: 600; }
-  .g-name.dropped { color: var(--muted); }
+  .g-name.counting { color: var(--text); font-weight: 600; }
 
   .g-badge {
     font-size: 10px;
-    padding: 2px 6px;
+    padding: 2px 7px;
     border-radius: 5px;
     white-space: nowrap;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.3px;
   }
 
-  .g-badge.counts { background: #e6f4eb; color: #1b6b36; }
-  .g-badge.drop { background: #f0f0f0; color: #999; }
+  .g-badge.counts { background: var(--green-subtle); color: var(--green); border: 1px solid rgba(0,230,118,0.2); }
+  .g-badge.drop { background: #1a1f1d; color: var(--text-dim); border: 1px solid var(--border); }
 
   .g-score {
     font-size: 13px;
     font-weight: 700;
     min-width: 36px;
     text-align: right;
+    font-variant-numeric: tabular-nums;
   }
 
-  .g-score.under { color: var(--under); }
+  .g-score.under { color: var(--green); }
   .g-score.over { color: var(--over); }
   .g-score.even { color: var(--even); }
-  .g-score.cut { color: var(--cut); font-weight: 400; font-style: italic; }
+  .g-score.cut { color: var(--cut); font-weight: 400; }
+
+  /* ROUND SCORES in detail */
+  .g-rounds {
+    display: flex;
+    gap: 4px;
+    margin-top: 3px;
+  }
+
+  .g-round-score {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #1e2724;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+
+  .g-round-score.under { color: var(--text-muted); background: #1e2724; }
+  .g-round-score.over { color: var(--text-muted); background: #1e2724; }
 
   .g-status {
     font-size: 11px;
-    color: var(--muted);
+    color: var(--text-dim);
     min-width: 48px;
     text-align: right;
   }
 
   .detail-note {
     font-size: 10px;
-    color: var(--muted);
+    color: var(--text-dim);
     margin-top: 10px;
     text-align: center;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.3px;
   }
 
   /* ERROR */
   .error-msg {
-    background: #fff5f5;
-    border: 1px solid #f5c6c6;
+    background: #1a1f1d;
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 12px 16px;
-    color: #a83232;
+    color: var(--text-muted);
     font-size: 13px;
     margin-bottom: 14px;
     text-align: center;
@@ -341,15 +408,13 @@
   footer {
     text-align: center;
     font-size: 11px;
-    color: var(--muted);
+    color: var(--text-dim);
     padding: 8px 16px 24px;
     max-width: 640px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.8;
+    letter-spacing: 0.2px;
   }
-
-  .spin { display: inline-block; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -364,13 +429,14 @@
           <div class="header-sub">Augusta National · Best 6 of 8</div>
         </div>
       </div>
-      <button class="refresh-btn" onclick="loadScores()">
-        <span id="refresh-icon">↻</span> Refresh
-      </button>
+      <button class="refresh-btn" onclick="loadScores()">↻ Refresh</button>
     </div>
     <div class="status-bar">
-      <span class="dot" id="status-dot"></span>
-      <span id="status-text">Loading scores...</span>
+      <div class="status-pill" id="status-pill">
+        <span class="dot loading" id="status-dot"></span>
+        <span id="status-text">Loading...</span>
+      </div>
+      <span class="updated-time" id="updated-time"></span>
     </div>
   </div>
 </header>
@@ -380,11 +446,11 @@
   <div id="error-box" class="error-msg" style="display:none"></div>
 
   <div class="legend">
-    <span><strong style="color:var(--under)">−</strong> Under par</span>
-    <span><strong style="color:var(--over)">+</strong> Over par</span>
-    <span><strong style="color:var(--even)">E</strong> Even</span>
-    <span style="color:var(--cut)"><em>CUT</em> Doesn't count</span>
-    <span><span style="color:#1b6b36;font-weight:600">★</span> Counting</span>
+    <span><strong style="color:var(--text)">−</strong> Under par</span>
+    <span><strong style="color:var(--text)">+</strong> Over par</span>
+    <span><strong style="color:var(--text)">E</strong> Even</span>
+    <span style="color:var(--text-dim)">CUT doesn't count</span>
+    <span><strong style="color:var(--green)">★</strong> Counting</span>
   </div>
 
   <div class="col-headers">
@@ -399,13 +465,10 @@
 
 <footer>
   Scores via ESPN · Auto-refreshes every 3 minutes<br>
-  CUT / WD golfers score as +99 and are dropped automatically
+  CUT / WD golfers are dropped automatically · Best 6 of 8 count
 </footer>
 
 <script>
-// ============================================================
-//  TEAM CONFIGURATION — EDIT THIS SECTION
-// ============================================================
 const TEAMS = [
   {
     name: "Felix",
@@ -441,10 +504,9 @@ const TEAMS = [
   }
 ];
 
-// ============================================================
-//  APP LOGIC
-// ============================================================
 let liveScores = {};
+let lastUpdated = null;
+let isLive = false;
 
 function scoreClass(val) {
   if (val === null) return 'cut';
@@ -483,6 +545,14 @@ function calcTeam(picks) {
   return { scores, total };
 }
 
+function buildRoundPips(rounds) {
+  if (!rounds || rounds.length === 0) return '';
+  return `<div class="g-rounds">${rounds.map((r, i) => {
+    const sc = r < 0 ? 'under' : r > 0 ? 'over' : '';
+    return `<span class="g-round-score ${sc}">R${i+1}: ${fmt(r)}</span>`;
+  }).join('')}</div>`;
+}
+
 function buildDetail(picks, scores) {
   const validSorted = scores.filter(s => s !== null).slice().sort((a, b) => a - b);
   const countingPool = [...validSorted.slice(0, 6)];
@@ -499,14 +569,18 @@ function buildDetail(picks, scores) {
     const counting = isCounting[i];
     const sc = scoreClass(s);
     const status = data?.status || '–';
+    const rounds = data?.rounds || [];
     const badge = s === null
-      ? `<span class="g-badge drop">cut/wd</span>`
+      ? `<span class="g-badge drop">cut / wd</span>`
       : counting
         ? `<span class="g-badge counts">★ counts</span>`
         : `<span class="g-badge drop">dropped</span>`;
 
     return `<div class="detail-golfer">
-      <div class="g-name ${counting ? 'counting' : 'dropped'}">${name}</div>
+      <div>
+        <div class="g-name ${counting ? 'counting' : ''}">${name}</div>
+        ${buildRoundPips(rounds)}
+      </div>
       ${badge}
       <div class="g-score ${sc}">${fmt(s)}</div>
       <div class="g-status">${status}</div>
@@ -514,8 +588,16 @@ function buildDetail(picks, scores) {
   }).join('');
 }
 
+function getTiedRank(sorted, rank) {
+  const total = sorted[rank].total;
+  const firstAtTotal = sorted.findIndex(t => t.total === total);
+  const tiedCount = sorted.filter(t => t.total === total).length;
+  if (tiedCount > 1) return 'T' + (firstAtTotal + 1);
+  return '' + (rank + 1);
+}
+
 function renderLeaderboard() {
-  const sorted = TEAMS.map((team, i) => {
+  const sorted = TEAMS.map(team => {
     const { scores, total } = calcTeam(team.picks);
     return { team, scores, total };
   }).sort((a, b) => a.total - b.total);
@@ -525,51 +607,67 @@ function renderLeaderboard() {
 
   sorted.forEach(({ team, scores, total }, rank) => {
     const sc = scoreClass(total);
-    const rankClass = rank === 0 ? 'r1' : rank === 1 ? 'r2' : rank === 2 ? 'r3' : '';
+    const rankStr = getTiedRank(sorted, rank);
+    const isFirst = rankStr === '1';
+    const rankClass = rankStr === '1' ? 'r1' : rankStr === '2' ? 'r2' : rankStr === '3' ? 'r3' : '';
     const scoring = Math.min(scores.filter(s => s !== null).length, 6);
 
     const card = document.createElement('div');
-    card.className = 'team-card';
+    card.className = 'team-card' + (isFirst ? ' leader' : '');
     card.innerHTML = `
       <div class="team-header" onclick="toggle(this)">
-        <div class="rank ${rankClass}">${rank + 1}</div>
+        <div class="rank ${rankClass}">${rankStr}</div>
         <div>
           <div class="team-name">${team.name}</div>
           <div class="team-sub">${scoring} golfer${scoring !== 1 ? 's' : ''} scoring</div>
         </div>
-        <div class="team-score">
-          <div class="score-num ${sc}">${fmt(total)}</div>
-        </div>
+        <div class="score-num ${sc}">${fmt(total)}</div>
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
           <polyline points="6 9 12 15 18 9"/>
         </svg>
       </div>
-      <div class="team-detail">
-        ${buildDetail(team.picks, scores)}
-        <div class="detail-note">Best 6 of 8 picks count · Lowest scores selected automatically</div>
+      <div class="detail-wrap">
+        <div class="team-detail">
+          <div class="detail-inner">
+            ${buildDetail(team.picks, scores)}
+            <div class="detail-note">Best 6 of 8 picks count · Lowest scores selected automatically</div>
+          </div>
+        </div>
       </div>`;
     lb.appendChild(card);
   });
 }
 
 function toggle(header) {
-  const detail = header.nextElementSibling;
+  const wrap = header.nextElementSibling;
   const chevron = header.querySelector('.chevron');
-  const wasOpen = detail.classList.contains('open');
-  document.querySelectorAll('.team-detail.open').forEach(d => {
-    d.classList.remove('open');
-    d.previousElementSibling.querySelector('.chevron').classList.remove('open');
+  const wasOpen = wrap.classList.contains('open');
+  document.querySelectorAll('.detail-wrap.open').forEach(w => {
+    w.classList.remove('open');
+    w.previousElementSibling.querySelector('.chevron').classList.remove('open');
   });
-  if (!wasOpen) { detail.classList.add('open'); chevron.classList.add('open'); }
+  if (!wasOpen) { wrap.classList.add('open'); chevron.classList.add('open'); }
 }
 
-function setStatus(type, msg) {
-  document.getElementById('status-dot').className = 'dot ' + type;
-  document.getElementById('status-text').textContent = msg;
+function setStatus(state, msg) {
+  const pill = document.getElementById('status-pill');
+  const dot = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  const timeEl = document.getElementById('updated-time');
+
+  dot.className = 'dot ' + state;
+  pill.className = 'status-pill ' + (state === 'live' ? 'live' : state === 'error' ? 'error' : '');
+  text.textContent = msg;
+
+  if (state === 'live' && lastUpdated) {
+    timeEl.textContent = 'Updated ' + lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } else {
+    timeEl.textContent = '';
+  }
 }
 
 async function loadScores() {
-  setStatus('loading', 'Fetching live scores…');
+  setStatus('loading', 'Fetching scores…');
   document.getElementById('error-box').style.display = 'none';
   try {
     const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401703510', { cache: 'no-store' });
@@ -593,19 +691,31 @@ async function loadScores() {
       let score = null;
       if (raw === 'E') score = 0;
       else if (raw && raw !== '--') { const n = parseInt(raw); if (!isNaN(n)) score = n; }
-      liveScores[name] = { score, status: c.status?.type?.shortDetail || '' };
+
+      // Parse per-round scores
+      const rounds = [];
+      if (c.linescores) {
+        c.linescores.forEach(ls => {
+          const rv = ls.displayValue;
+          if (rv === 'E') rounds.push(0);
+          else if (rv && rv !== '--') { const n = parseInt(rv); if (!isNaN(n)) rounds.push(n); }
+        });
+      }
+
+      liveScores[name] = { score, status: c.status?.type?.shortDetail || '', rounds };
     });
 
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    setStatus('', `Live · Updated ${now}`);
+    lastUpdated = new Date();
+    isLive = true;
+    setStatus('live', 'Live');
     renderLeaderboard();
   } catch (e) {
-    setStatus('error', 'Could not load — tap Refresh to retry');
+    setStatus('error', 'Could not load');
     const eb = document.getElementById('error-box');
     eb.style.display = 'block';
     eb.textContent = '⚠ Tournament scores unavailable. This is normal before Round 1 on Thursday April 9.';
     if (Object.keys(liveScores).length === 0) {
-      TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–' }; }));
+      TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
     }
     renderLeaderboard();
   }
