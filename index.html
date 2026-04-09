@@ -817,40 +817,6 @@ function setStatus(state, msg) {
   }
 }
 
-const SLASHGOLF_KEY = 'YOUR_RAPIDAPI_KEY_HERE'; // paste your RapidAPI key here
-
-async function loadFromSlashGolf() {
-  const res = await fetch('https://live-golf-data.p.rapidapi.com/leaderboard?orgId=1&tournId=014&year=2026', {
-    method: 'GET',
-    headers: {
-      'x-rapidapi-key': SLASHGOLF_KEY,
-      'x-rapidapi-host': 'live-golf-data.p.rapidapi.com'
-    },
-    cache: 'no-store'
-  });
-  if (!res.ok) throw new Error('SlashGolf failed: ' + res.status);
-  const data = await res.json();
-  const players = data?.leaderboardRows || data?.players || data?.results || [];
-  if (!players.length) throw new Error('No SlashGolf data');
-  liveScores = {};
-  players.forEach(p => {
-    const first = p.firstName || p.first_name || '';
-    const last = p.lastName || p.last_name || '';
-    const name = `${first} ${last}`.trim();
-    const rawScore = p.total || p.totalScore || p.score || p.toPar || null;
-    let score = null;
-    if (rawScore === 'E' || rawScore === 0) score = 0;
-    else if (rawScore !== null && rawScore !== '--') {
-      const n = parseInt(rawScore);
-      if (!isNaN(n)) score = n;
-    }
-    const thru = p.thru || p.holesPlayed || p.currentHole || '';
-    const status = thru === 18 || p.status === 'F' ? 'F' : thru ? `Thru ${thru}` : 'In Progress';
-    liveScores[name] = { score, status, rounds: [] };
-  });
-  return true;
-}
-
 async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
@@ -883,76 +849,50 @@ async function loadScores() {
   };
 
   try {
-    let loaded = false;
-
-    // Try ESPN first
-    try {
-      const urls = [
-        'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=401811941',
-        'https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401811941',
-      ];
-      let comp = null;
-      for (const url of urls) {
-        try {
-          const r = await fetch(url, { cache: 'no-store' });
-          if (!r.ok) continue;
-          const d = await r.json();
-          comp = d?.events?.[0]?.competitions?.[0] || d?.competitions?.[0];
-          if (comp?.competitors?.length) break;
-        } catch(e) { continue; }
-      }
-      if (comp?.competitors?.length) {
-        const round = comp.status?.type?.description || '';
-        const banner = document.getElementById('round-banner');
-        if (round) {
-          banner.style.display = 'inline-flex';
-          banner.className = 'round-pill';
-          banner.innerHTML = `<span class="live-dot"></span>${round}`;
-        }
-        liveScores = {};
-        (comp.competitors || []).forEach(c => {
-          const name = c.athlete?.displayName || '';
-          const raw = c.score?.displayValue;
-          let score = null;
-          if (raw === 'E') score = 0;
-          else if (raw && raw !== '--') { const n = parseInt(raw); if (!isNaN(n)) score = n; }
-          const rounds = [];
-          if (c.linescores) {
-            c.linescores.forEach(ls => {
-              const rv = ls.displayValue;
-              if (rv === 'E') rounds.push(0);
-              else if (rv && rv !== '--') { const n = parseInt(rv); if (!isNaN(n)) rounds.push(n); }
-            });
-          }
-          liveScores[name] = { score, status: c.status?.type?.shortDetail || '', rounds };
-        });
-        loaded = true;
-        lastUpdated = new Date();
-        setStatus('live', 'Live · ESPN');
-      }
-    } catch(e) { console.warn('ESPN failed', e); }
-
-    // If ESPN failed or returned no data, try Slash Golf
-    if (!loaded && SLASHGOLF_KEY !== '720d9a8b3emsh762a2cde8216d34p161f66jsn781c0290e0a2
-') {
+    const urls = [
+      'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=401811941',
+      'https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401811941',
+    ];
+    let comp = null;
+    for (const url of urls) {
       try {
-        await loadFromSlashGolf();
-        loaded = true;
-        lastUpdated = new Date();
-        setStatus('live', 'Live · SlashGolf');
-      } catch(e) { console.warn('SlashGolf failed', e); }
+        const r = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) continue;
+        const d = await r.json();
+        comp = d?.events?.[0]?.competitions?.[0] || d?.competitions?.[0];
+        if (comp?.competitors?.length) break;
+      } catch(e) { continue; }
+    }
+    if (!comp || !comp.competitors?.length) throw new Error('No ESPN data from any URL');
+
+    const round = comp.status?.type?.description || '';
+    const banner = document.getElementById('round-banner');
+    if (round) {
+      banner.style.display = 'inline-flex';
+      banner.className = 'round-pill';
+      banner.innerHTML = `<span class="live-dot"></span>${round}`;
     }
 
-    if (!loaded) {
-      setStatus('error', 'Scores loading...');
-      const eb = document.getElementById('error-box');
-      eb.style.display = 'block';
-      eb.textContent = 'Scores may load slowly at the start of the tournament — tap Refresh to retry.';
-      if (Object.keys(liveScores).length === 0) {
-        TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
+    liveScores = {};
+    (comp.competitors || []).forEach(c => {
+      const name = c.athlete?.displayName || '';
+      const raw = c.score?.displayValue;
+      let score = null;
+      if (raw === 'E') score = 0;
+      else if (raw && raw !== '--') { const n = parseInt(raw); if (!isNaN(n)) score = n; }
+      const rounds = [];
+      if (c.linescores) {
+        c.linescores.forEach(ls => {
+          const rv = ls.displayValue;
+          if (rv === 'E') rounds.push(0);
+          else if (rv && rv !== '--') { const n = parseInt(rv); if (!isNaN(n)) rounds.push(n); }
+        });
       }
-    }
+      liveScores[name] = { score, status: c.status?.type?.shortDetail || '', rounds };
+    });
 
+    lastUpdated = new Date();
+    setStatus('live', 'Live');
   } catch (e) {
     setStatus('error', 'Scores loading...');
     const eb = document.getElementById('error-box');
@@ -972,7 +912,7 @@ async function loadScores() {
 }
 
 loadScores();
-setInterval(loadScores, 600000); // 10 minutes to stay within API limits
+setInterval(loadScores, 180000);
 </script>
 </body>
 </html>
