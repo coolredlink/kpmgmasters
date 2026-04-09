@@ -817,11 +817,13 @@ function setStatus(state, msg) {
   }
 }
 
+const SLASHGOLF_KEY = '720d9a8b3emsh762a2cde8216d34p161f66jsn781c0290e0a2
+'; // paste your RapidAPI key here
+
 async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
 
-  // Manual score overrides — always apply these as they are more accurate than ESPN in-progress scores
   const manualScores = {
     'Sam Burns': { score: -5, status: 'F', rounds: [] },
     'Rory McIlroy': { score: -5, status: 'Thru 16', rounds: [] },
@@ -849,61 +851,50 @@ async function loadScores() {
   };
 
   try {
-    const urls = [
-      'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?event=401811941',
-      'https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard?event=401811941',
-    ];
-    let comp = null;
-    for (const url of urls) {
-      try {
-        const r = await fetch(url, { cache: 'no-store' });
-        if (!r.ok) continue;
-        const d = await r.json();
-        comp = d?.events?.[0]?.competitions?.[0] || d?.competitions?.[0];
-        if (comp?.competitors?.length) break;
-      } catch(e) { continue; }
-    }
-    if (!comp || !comp.competitors?.length) throw new Error('No ESPN data from any URL');
-
-    const round = comp.status?.type?.description || '';
-    const banner = document.getElementById('round-banner');
-    if (round) {
-      banner.style.display = 'inline-flex';
-      banner.className = 'round-pill';
-      banner.innerHTML = `<span class="live-dot"></span>${round}`;
-    }
-
-    liveScores = {};
-    (comp.competitors || []).forEach(c => {
-      const name = c.athlete?.displayName || '';
-      const raw = c.score?.displayValue;
-      let score = null;
-      if (raw === 'E') score = 0;
-      else if (raw && raw !== '--') { const n = parseInt(raw); if (!isNaN(n)) score = n; }
-      const rounds = [];
-      if (c.linescores) {
-        c.linescores.forEach(ls => {
-          const rv = ls.displayValue;
-          if (rv === 'E') rounds.push(0);
-          else if (rv && rv !== '--') { const n = parseInt(rv); if (!isNaN(n)) rounds.push(n); }
-        });
+    const res = await fetch('https://live-golf-data.p.rapidapi.com/leaderboard?orgId=1&tournId=014&year=2026', {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': SLASHGOLF_KEY,
+        'x-rapidapi-host': 'live-golf-data.p.rapidapi.com'
       }
-      liveScores[name] = { score, status: c.status?.type?.shortDetail || '', rounds };
     });
-
-    lastUpdated = new Date();
-    setStatus('live', 'Live');
+    if (!res.ok) throw new Error('SlashGolf ' + res.status);
+    const data = await res.json();
+    const players = data?.leaderboardRows || data?.players || data?.results || data?.leaderboard || [];
+    if (players.length) {
+      liveScores = {};
+      players.forEach(p => {
+        const first = p.firstName || p.first_name || p.playerFirstName || '';
+        const last = p.lastName || p.last_name || p.playerLastName || '';
+        const name = (first + ' ' + last).trim();
+        const rawScore = p.total || p.totalScore || p.toPar || p.score || null;
+        let score = null;
+        if (rawScore === 'E' || rawScore === 0) score = 0;
+        else if (rawScore !== null && rawScore !== '--') {
+          const n = parseInt(rawScore);
+          if (!isNaN(n)) score = n;
+        }
+        const thru = p.thru || p.holesPlayed || p.currentHole || '';
+        const status = (thru === 18 || thru === '18' || p.status === 'F') ? 'F' : thru ? 'Thru ' + thru : 'In Progress';
+        if (name) liveScores[name] = { score, status, rounds: [] };
+      });
+      lastUpdated = new Date();
+      setStatus('live', 'Live');
+    } else {
+      throw new Error('No players in response');
+    }
   } catch (e) {
+    console.warn('SlashGolf error:', e.message);
     setStatus('error', 'Scores loading...');
-    const eb = document.getElementById('error-box');
-    eb.style.display = 'block';
-    eb.textContent = 'Scores may load slowly at the start of the tournament — tap Refresh to retry.';
+    document.getElementById('error-box').style.display = 'block';
+    document.getElementById('error-box').textContent = 'Scores may load slowly — tap Refresh to retry.';
     if (Object.keys(liveScores).length === 0) {
-      TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
+      TEAMS.forEach(t => t.picks.forEach(p => {
+        if (!liveScores[p]) liveScores[p] = { score: null, status: '-', rounds: [] };
+      }));
     }
   }
 
-  // Manual score overrides — always apply these as they are more accurate than ESPN in-progress scores
   Object.entries(manualScores).forEach(([name, data]) => {
     liveScores[name] = data;
   });
@@ -912,7 +903,7 @@ async function loadScores() {
 }
 
 loadScores();
-setInterval(loadScores, 180000);
+setInterval(loadScores, 600000);
 </script>
 </body>
 </html>
