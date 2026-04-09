@@ -821,13 +821,18 @@ async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
 
-  // Manual score overrides — remove once ESPN API is fully live
+  // Manual score overrides — only apply if ESPN hasn't returned a real score yet
   const manualScores = {
-    'Sam Burns': { score: -2, status: 'Active', rounds: [] },
-    'Shane Lowry': { score: -2, status: 'Active', rounds: [] },
-    'Nick Taylor': { score: -1, status: 'Active', rounds: [] },
-    'Akshay Bhatia': { score: -1, status: 'Active', rounds: [] },
-    'Patrick Reed': { score: -3, status: 'Active', rounds: [] },
+    'Patrick Reed': { score: -3, status: 'Thru 3', rounds: [] },
+    'Sam Burns': { score: -2, status: 'Thru 5', rounds: [] },
+    'Nick Taylor': { score: -1, status: 'Thru 4', rounds: [] },
+    'Akshay Bhatia': { score: -1, status: 'Thru 3', rounds: [] },
+    'Xander Schauffele': { score: -1, status: 'Thru 2', rounds: [] },
+    'Shane Lowry': { score: 0, status: 'Thru 4', rounds: [] },
+    'Matt Fitzpatrick': { score: 0, status: 'Thru 2', rounds: [] },
+    'Rory McIlroy': { score: 0, status: 'Thru 1', rounds: [] },
+    'Bryson DeChambeau': { score: 1, status: 'Thru 2', rounds: [] },
+    'Cameron Young': { score: 1, status: 'Thru 1', rounds: [] },
   };
 
   try {
