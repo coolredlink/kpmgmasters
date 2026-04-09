@@ -875,9 +875,11 @@ async function loadScores() {
     }
   }
 
-  // Always apply manual overrides regardless of API result
+  // Manual score overrides — only apply if ESPN hasn't returned a real score yet
   Object.entries(manualScores).forEach(([name, data]) => {
-    liveScores[name] = data;
+    if (!liveScores[name] || liveScores[name].score === null) {
+      liveScores[name] = data;
+    }
   });
 
   renderLeaderboard();
