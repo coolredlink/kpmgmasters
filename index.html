@@ -903,11 +903,9 @@ async function loadScores() {
     }
   }
 
-  // Manual score overrides — only apply if ESPN hasn't returned a real score yet
+  // Manual score overrides — always apply these as they are more accurate than ESPN in-progress scores
   Object.entries(manualScores).forEach(([name, data]) => {
-    if (!liveScores[name] || liveScores[name].score === null) {
-      liveScores[name] = data;
-    }
+    liveScores[name] = data;
   });
 
   renderLeaderboard();
