@@ -817,6 +817,23 @@ function setStatus(state, msg) {
   }
 }
 
+const SPORTSDATAIO_KEY = '7b3b85012ba64ee28111ce897b7a3f2e'; // paste your sportsdata.io key here
+
+async function loadFromSportsDataIO() {
+  const res = await fetch(`https://api.sportsdata.io/golf/v2/json/Leaderboard/28?key=${SPORTSDATAIO_KEY}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('SportsDataIO failed: ' + res.status);
+  const data = await res.json();
+  if (!data?.Players) throw new Error('No player data');
+  liveScores = {};
+  data.Players.forEach(p => {
+    const name = `${p.FirstName} ${p.LastName}`;
+    const score = p.TotalScore ?? null;
+    const status = p.IsWithdrawn ? 'WD' : p.MadeCut === false ? 'CUT' : 'Active';
+    const rounds = (p.Rounds || []).map(r => r.Score ?? null).filter(s => s !== null);
+    liveScores[name] = { score, status, rounds };
+  });
+}
+
 async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
@@ -825,7 +842,7 @@ async function loadScores() {
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     const comp = data?.events?.[0]?.competitions?.[0];
-    if (!comp) throw new Error('No data');
+    if (!comp || !comp.competitors?.length) throw new Error('No ESPN data');
 
     const round = comp.status?.type?.description || '';
     const banner = document.getElementById('round-banner');
@@ -854,17 +871,25 @@ async function loadScores() {
     });
 
     lastUpdated = new Date();
-    setStatus('live', 'Live');
+    setStatus('live', 'Live · ESPN');
     renderLeaderboard();
-  } catch (e) {
-    setStatus('error', 'Unavailable');
-    const eb = document.getElementById('error-box');
-    eb.style.display = 'block';
-    eb.textContent = 'Tournament scores unavailable — this is normal before Round 1 on Thursday April 9.';
-    if (Object.keys(liveScores).length === 0) {
-      TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
+  } catch (espnErr) {
+    console.warn('ESPN failed, trying SportsData.io...', espnErr);
+    try {
+      await loadFromSportsDataIO();
+      lastUpdated = new Date();
+      setStatus('live', 'Live · SportsData');
+      renderLeaderboard();
+    } catch (sdErr) {
+      setStatus('error', 'Unavailable');
+      const eb = document.getElementById('error-box');
+      eb.style.display = 'block';
+      eb.textContent = 'Tournament scores unavailable — tap Refresh to retry.';
+      if (Object.keys(liveScores).length === 0) {
+        TEAMS.forEach(t => t.picks.forEach(p => { if (!liveScores[p]) liveScores[p] = { score: null, status: '–', rounds: [] }; }));
+      }
+      renderLeaderboard();
     }
-    renderLeaderboard();
   }
 }
 
