@@ -817,6 +817,41 @@ function setStatus(state, msg) {
   }
 }
 
+const SLASHGOLF_KEY = '720d9a8b3emsh762a2cde8216d34p161f66jsn781c0290e0a2
+'; // paste your RapidAPI key here
+
+async function loadFromSlashGolf() {
+  const res = await fetch('https://live-golf-data.p.rapidapi.com/leaderboard?orgId=1&tournId=014&year=2026', {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': SLASHGOLF_KEY,
+      'x-rapidapi-host': 'live-golf-data.p.rapidapi.com'
+    },
+    cache: 'no-store'
+  });
+  if (!res.ok) throw new Error('SlashGolf failed: ' + res.status);
+  const data = await res.json();
+  const players = data?.leaderboardRows || data?.players || data?.results || [];
+  if (!players.length) throw new Error('No SlashGolf data');
+  liveScores = {};
+  players.forEach(p => {
+    const first = p.firstName || p.first_name || '';
+    const last = p.lastName || p.last_name || '';
+    const name = `${first} ${last}`.trim();
+    const rawScore = p.total || p.totalScore || p.score || p.toPar || null;
+    let score = null;
+    if (rawScore === 'E' || rawScore === 0) score = 0;
+    else if (rawScore !== null && rawScore !== '--') {
+      const n = parseInt(rawScore);
+      if (!isNaN(n)) score = n;
+    }
+    const thru = p.thru || p.holesPlayed || p.currentHole || '';
+    const status = thru === 18 || p.status === 'F' ? 'F' : thru ? `Thru ${thru}` : 'In Progress';
+    liveScores[name] = { score, status, rounds: [] };
+  });
+  return true;
+}
+
 async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
@@ -847,45 +882,6 @@ async function loadScores() {
     'Min Woo Lee': { score: 4, status: 'Thru 10', rounds: [] },
     'Patrick Cantlay': { score: 4, status: 'Thru 16', rounds: [] },
   };
-
-  // ============================================================
-  // SLASH GOLF API KEY — paste your RapidAPI key here
-  // ============================================================
-  const SLASHGOLF_KEY = '720d9a8b3emsh762a2cde8216d34p161f66jsn781c0290e0a2
-';
-
-  async function loadFromSlashGolf() {
-    const res = await fetch('https://live-golf-data.p.rapidapi.com/leaderboard?orgId=1&tournId=014&year=2026', {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': SLASHGOLF_KEY,
-        'x-rapidapi-host': 'live-golf-data.p.rapidapi.com'
-      },
-      cache: 'no-store'
-    });
-    if (!res.ok) throw new Error('SlashGolf failed: ' + res.status);
-    const data = await res.json();
-    const players = data?.leaderboardRows || data?.players || data?.results || [];
-    if (!players.length) throw new Error('No SlashGolf data');
-
-    liveScores = {};
-    players.forEach(p => {
-      const first = p.firstName || p.first_name || '';
-      const last = p.lastName || p.last_name || '';
-      const name = `${first} ${last}`.trim();
-      const rawScore = p.total || p.totalScore || p.score || p.toPar || null;
-      let score = null;
-      if (rawScore === 'E' || rawScore === 0) score = 0;
-      else if (rawScore !== null && rawScore !== '--') {
-        const n = parseInt(rawScore);
-        if (!isNaN(n)) score = n;
-      }
-      const thru = p.thru || p.holesPlayed || p.currentHole || '';
-      const status = thru === 18 || p.status === 'F' ? 'F' : thru ? `Thru ${thru}` : 'In Progress';
-      liveScores[name] = { score, status, rounds: [] };
-    });
-    return true;
-  }
 
   try {
     let loaded = false;
