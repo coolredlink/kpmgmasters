@@ -821,31 +821,31 @@ async function loadScores() {
   setStatus('loading', 'Fetching');
   document.getElementById('error-box').style.display = 'none';
 
-  // Manual score overrides — only apply if ESPN hasn't returned a real score yet
+  // Manual score overrides — always apply these as they are more accurate than ESPN in-progress scores
   const manualScores = {
     'Sam Burns': { score: -5, status: 'F', rounds: [] },
-    'Rory McIlroy': { score: -4, status: 'Thru 14', rounds: [] },
-    'Patrick Reed': { score: -3, status: 'Thru 17', rounds: [] },
-    'Ludvig Aberg': { score: -3, status: 'Thru 6', rounds: [] },
-    'Scottie Scheffler': { score: -3, status: 'Thru 4', rounds: [] },
-    'Shane Lowry': { score: -2, status: 'Thru 17', rounds: [] },
-    'Justin Rose': { score: -2, status: 'Thru 6', rounds: [] },
-    'Justin Thomas': { score: -2, status: 'Thru 5', rounds: [] },
+    'Rory McIlroy': { score: -5, status: 'Thru 16', rounds: [] },
+    'Patrick Reed': { score: -3, status: 'F', rounds: [] },
+    'Ludvig Aberg': { score: -3, status: 'Thru 8', rounds: [] },
+    'Scottie Scheffler': { score: -3, status: 'Thru 6', rounds: [] },
+    'Shane Lowry': { score: -2, status: 'F', rounds: [] },
+    'Xander Schauffele': { score: -2, status: 'Thru 17', rounds: [] },
+    'Justin Rose': { score: -2, status: 'Thru 7', rounds: [] },
+    'Justin Thomas': { score: -2, status: 'Thru 7', rounds: [] },
     'Nick Taylor': { score: -1, status: 'F', rounds: [] },
-    'Xander Schauffele': { score: -1, status: 'Thru 16', rounds: [] },
-    'Corey Conners': { score: -1, status: 'Thru 8', rounds: [] },
-    'Brooks Koepka': { score: 0, status: 'Thru 6', rounds: [] },
-    'Harris English': { score: 0, status: 'Thru 3', rounds: [] },
-    'Matt Fitzpatrick': { score: 0, status: 'Thru 16', rounds: [] },
-    'Tyrrell Hatton': { score: 1, status: 'Thru 7', rounds: [] },
-    'Jacob Bridgeman': { score: 1, status: 'Thru 8', rounds: [] },
-    'Akshay Bhatia': { score: 2, status: 'Thru 17', rounds: [] },
-    'Cameron Young': { score: 2, status: 'Thru 14', rounds: [] },
-    'Nicolai Hojgaard': { score: 2, status: 'Thru 11', rounds: [] },
-    'Min Woo Lee': { score: 3, status: 'Thru 9', rounds: [] },
-    'Viktor Hovland': { score: 3, status: 'Thru 14', rounds: [] },
-    'Bryson DeChambeau': { score: 4, status: 'Thru 16', rounds: [] },
-    'Patrick Cantlay': { score: 4, status: 'Thru 14', rounds: [] },
+    'Corey Conners': { score: 0, status: 'Thru 9', rounds: [] },
+    'Brooks Koepka': { score: 0, status: 'Thru 7', rounds: [] },
+    'Matt Fitzpatrick': { score: 0, status: 'Thru 17', rounds: [] },
+    'Akshay Bhatia': { score: 1, status: 'F', rounds: [] },
+    'Harris English': { score: 1, status: 'Thru 5', rounds: [] },
+    'Nicolai Hojgaard': { score: 1, status: 'Thru 13', rounds: [] },
+    'Jacob Bridgeman': { score: 1, status: 'Thru 9', rounds: [] },
+    'Tyrrell Hatton': { score: 1, status: 'Thru 8', rounds: [] },
+    'Cameron Young': { score: 1, status: 'Thru 16', rounds: [] },
+    'Bryson DeChambeau': { score: 3, status: 'Thru 17', rounds: [] },
+    'Viktor Hovland': { score: 3, status: 'Thru 15', rounds: [] },
+    'Min Woo Lee': { score: 4, status: 'Thru 10', rounds: [] },
+    'Patrick Cantlay': { score: 4, status: 'Thru 16', rounds: [] },
   };
 
   try {
