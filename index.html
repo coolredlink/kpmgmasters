@@ -155,7 +155,9 @@ const TEAMS = [
   { name: "Laurent", picks: ["Scottie Scheffler","Cameron Young","Matt Fitzpatrick","Xander Schauffele","Min Woo Lee","Sam Burns","Justin Thomas","Corey Conners"] }
 ];
 
-const liveScores = {
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKAISaOy4PKPLJkGmXTh3TG0IndLoakRz1vYvXx2LVw6DSKbTeqbP3Rqwo1Fc9KWvNZweSWXxn_MhA/pub?gid=0&single=true&output=csv';
+
+let liveScores = {
   'Sam Burns': { score: -5, status: 'F', rounds: [] },
   'Rory McIlroy': { score: -5, status: 'F', rounds: [] },
   'Patrick Reed': { score: -3, status: 'F', rounds: [] },
@@ -274,15 +276,40 @@ function toggle(header) {
   if (!wasOpen) { wrap.classList.add('open'); chevron.classList.add('open'); }
 }
 
-function loadScores() {
-  document.getElementById('status-pill').className = 'status-pill live';
-  document.getElementById('status-dot').className = 'dot live';
-  document.getElementById('status-text').textContent = 'R1 In Progress';
-  document.getElementById('updated-time').textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+async function loadScores() {
+  document.getElementById('status-dot').className = 'dot loading';
+  document.getElementById('status-text').textContent = 'Updating...';
+  try {
+    const res = await fetch(SHEET_URL + '&t=' + Date.now());
+    if (!res.ok) throw new Error('Sheet fetch failed');
+    const text = await res.text();
+    const rows = text.trim().split('\n').slice(1); // skip header row
+    rows.forEach(row => {
+      const cols = row.split(',');
+      const name = cols[0] ? cols[0].trim().replace(/^"|"$/g, '') : '';
+      const scoreRaw = cols[1] ? cols[1].trim().replace(/^"|"$/g, '') : '';
+      if (!name || scoreRaw === '') return;
+      const score = parseInt(scoreRaw);
+      if (!isNaN(score)) {
+        liveScores[name] = { score, status: liveScores[name] ? liveScores[name].status : '', rounds: [] };
+      }
+    });
+    document.getElementById('status-pill').className = 'status-pill live';
+    document.getElementById('status-dot').className = 'dot live';
+    document.getElementById('status-text').textContent = 'Live';
+    document.getElementById('updated-time').textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch(e) {
+    console.warn('Sheet fetch failed:', e);
+    document.getElementById('status-pill').className = 'status-pill live';
+    document.getElementById('status-dot').className = 'dot live';
+    document.getElementById('status-text').textContent = 'Tournament in Progress';
+    document.getElementById('updated-time').textContent = '';
+  }
   renderLeaderboard();
 }
 
 loadScores();
+setInterval(loadScores, 300000); // refresh every 5 minutes
 </script>
 </body>
 </html>
